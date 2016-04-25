@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:mvc="http://www.springframework.org/schema/mvc"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<!-- 设置使用注解的类的包 -->
+	<context:component-scan base-package="com.cfang.WeChat" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!-- <context:component-scan/>标签是告诉Spring 来扫描指定包下的类，并注册被@Component，@Controller，@Service，@Repository等注解标记的组件。
+	         而<mvc:annotation-scan/>是告知Spring，我们启用注解驱动。然后Spring会自动为我们注册上面说到的几个Bean到工厂中，来处理我们的请求 -->
+	<!-- 自动注册多个bean，例如处理@RequestMapping、@Controller注解 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>   
+    -->
+    
+	<!-- 配置视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	    <property name="prefix" value="/WEB-INF/jsp/"/>
+	    <property name="suffix" value=".jsp"/>
+	</bean>
+
+	<!-- <bean id="authInterceptors" class="com.cfang.fund.interceptors.AuthInterceptors"></bean>	
+	拦截器配置
+	<mvc:interceptors>
+	    <ref bean="authInterceptors"/>
+	</mvc:interceptors>
+	
+	静态资源(js/image/html...)的访问  
+	<mvc:default-servlet-handler/>
+    <mvc:resources location="/js/" mapping="/js/**"/> -->
+</beans>
