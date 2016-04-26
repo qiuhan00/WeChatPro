@@ -16,7 +16,6 @@
 	<context:component-scan base-package="com.cfang.WeChat" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
 	</context:component-scan>
 	
     <!-- 加载资源文件 -->

@@ -29,12 +29,12 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
 	    <property name="suffix" value=".jsp"/>
 	</bean>
 
-	<!-- <bean id="authInterceptors" class="com.cfang.fund.interceptors.AuthInterceptors"></bean>	
-	拦截器配置
+	<!-- 拦截器配置 -->
+	<bean id="authInterceptors" class="com.cfang.WeChat.interceptor.AuthInterceptors"></bean>	
 	<mvc:interceptors>
 	    <ref bean="authInterceptors"/>
 	</mvc:interceptors>
-	
+	<!--
 	静态资源(js/image/html...)的访问  
 	<mvc:default-servlet-handler/>
     <mvc:resources location="/js/" mapping="/js/**"/> -->

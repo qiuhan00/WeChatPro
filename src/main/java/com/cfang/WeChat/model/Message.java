@@ -1,7 +1,11 @@
 package com.cfang.WeChat.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="t_message")
 public class Message extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
