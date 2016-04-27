@@ -52,20 +52,22 @@
        		<prop key="hibernate.dialect">${hibernate.dialect}</prop>
        		<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
        		<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-       		<!-- 二级缓存 -->
-       		<!-- 
-       		<prop key="hibernate.cache.use_second_level_cache">true</prop>
-       		<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
-       		<prop key="hibernate.cache.use_query_cache">true</prop>
-       		-->
-       		<!-- 
-       		<prop key="hibernate.memcached.servers">${memcached.servers}</prop>
-       		<prop key="hibernate.memcached.cacheTimeSeconds">${hibernate.memcached.cacheTimeSeconds}</prop> 
-       		-->
        		<!-- 数据库批量查询数 -->
        		<prop key="hibernate.jdbc.fetch_size">10</prop>
        		<!-- 数据库批量更新数 -->
        		<prop key="hibernate.jdbc.batch_size">10</prop>
+       		<!-- hibernate-memcache缓存配置开始 -->
+       		<!-- 二级缓存 -->
+       		<!-- 
+       		<prop key="hibernate.cache.use_second_level_cache">true</prop>
+       		<prop key="hibernate.cache.provider_class">${hibernate.cache.provider_class}</prop>
+       		<prop key="hibernate.cache.region_prefix">${hibernate.cache.region_prefix}</prop> 
+       		<prop key="hibernate.cache.use_structured_entries">true</prop> 
+       		<prop key="hibernate.cache.use_query_cache">true</prop>
+       		<prop key="hibernate.memcached.servers">${memcached.servers}</prop>
+       		<prop key="hibernate.memcached.cacheTimeSeconds">${hibernate.memcached.cacheTimeSeconds}</prop> 
+       		-->
+       		<!-- hibernate-memcache缓存配置结束 -->
       	</props>
 		</property>
 		<!-- 配置hiberntae拦截器,对公共字段操作 -->
