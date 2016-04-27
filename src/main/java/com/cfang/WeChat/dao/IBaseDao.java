@@ -38,8 +38,6 @@ public interface IBaseDao<T> {
     
     List<T> queryParams(String hql, Map<String, Object> map, boolean... isUseCache);
     
-    List<T> queryParams(Map<String, Object> map, int start, int maxNum, boolean... isUseCache);
-    
     List<T> queryParams(String hql, Map<String, Object> map, int start, int maxNum, boolean... isUseCache);
     
     T queryByParamUnique(String hql, Map<String, Object> map);
@@ -50,7 +48,7 @@ public interface IBaseDao<T> {
     //分页查询
     Page<T> findPage(final Page<T> page, final String hql, final Map<String, Object> params);
     
-    Page<T> findPageSQL(final Page<T> page, final String sql, final Map<String, Object> params);
+    Page<T> findPageSQL(final Page<Object[]> page, final String sql, final Map<String, Object> params);
     
     long countHqlResult(final String hql, final Map<String, Object> values);
     
@@ -64,5 +62,5 @@ public interface IBaseDao<T> {
     //执行存储过程
     boolean executeStoreProcedure(String name, Map<Integer, String> map);
     //执行函数
-    Object executeFunction(String name, Map<Integer, ? extends Object> map, Class entityClass);
+    Object executeFunction(String name, Map<Integer, ? extends Object> map, Class<T> entityClass);
 }

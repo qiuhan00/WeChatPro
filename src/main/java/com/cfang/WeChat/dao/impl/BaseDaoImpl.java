@@ -1,5 +1,6 @@
 package com.cfang.WeChat.dao.impl;
 
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
@@ -7,11 +8,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.hamcrest.core.IsAnything;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
-import org.hibernate.LockOptions;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -109,7 +111,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 //		criteria.setCacheable(isUseCache[0]);
 //		return criteria.list();
 		
-		return (List<T>) this.getHibernateTemplate().execute(new HibernateCallback<T>() {
+		return this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
 			@Override
 			public T doInHibernate(Session session) throws HibernateException,
 					SQLException {
@@ -122,104 +124,223 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> queryParams(String hql, Map<String, Object> map,
-			boolean... isUseCache) {
-		
-		return null;
+	public List<T> queryParams(final String hql, final Map<String, Object> map,
+			final boolean... isUseCache) {
+		return this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				Query query = session.createQuery(hql);
+				if(null != map){
+					query.setProperties(map);
+				}
+				query.setCacheable(isUseCache[0]);
+				return (T) query.list();
+			}
+			
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> queryParams(Map<String, Object> map, int start, int maxNum,
-			boolean... isUseCache) {
-		
-		return null;
+	public List<T> queryParams(final String hql,final Map<String, Object> map,final int start,
+			final int maxNum, final boolean... isUseCache) {
+		return this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				Query query = session.createQuery(hql);
+				if(null != map){
+					query.setProperties(map);
+				}
+				query.setFirstResult(start);
+				query.setMaxResults(maxNum);
+				query.setCacheable(isUseCache[0]);
+				return (T)query.list();
+			}
+			
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> queryParams(String hql, Map<String, Object> map, int start,
-			int maxNum, boolean... isUseCache) {
-		
-		return null;
+	public T queryByParamUnique(final String hql, final Map<String, Object> map) {
+		return this.getHibernateTemplate().execute(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				Query query = session.createQuery(hql);
+				if(null != map){
+					query.setProperties(map);
+				}
+				return (T) query.uniqueResult();
+			}
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public T queryByParamUnique(String hql, Map<String, Object> map) {
-		
-		return null;
+	public List<T> queryBySQL(final String sql, final Map<String, Object> params) {
+		return this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				SQLQuery sqlQuery = session.createSQLQuery(sql);
+				if(null != params){
+					sqlQuery.setProperties(params);
+				}
+				return (T)sqlQuery.list();
+			}
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> queryBySQL(String sql, Map<String, Object> params) {
-		
-		return null;
+	public List<T> queryBySQL(final String sql, final Map<String, Object> params,
+			final Integer limit) {
+		return this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				SQLQuery sqlQuery = session.createSQLQuery(sql);
+				if(null != params){
+					sqlQuery.setProperties(params);
+				}
+				if (limit != null && limit > 0) {
+					sqlQuery.setMaxResults(limit);
+				}
+				return (T)sqlQuery.list();
+			}
+		});
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> queryBySQL(String sql, Map<String, Object> params,
-			Integer limit) {
-		
-		return null;
+	public Page<T> findPage(Page<T> page, final String hql, final Map<String, Object> params) {
+		if(page.isAutoCount()){
+			page.setTotalCount(this.countHqlResult(hql, params));
+		}
+		final int firstResult = page.getFirst() - 1; //起始页
+		final int maxResults = page.getPageSize(); //每页最大数据量
+		List<T> list = this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				Query query = session.createQuery(hql);
+				if(null != params){
+					query.setProperties(params);
+				}
+				query.setFirstResult(firstResult);
+				query.setMaxResults(maxResults);
+				return (T) query.list();
+			}
+		});
+		page.setResult(list);
+		return page;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Page<T> findPage(Page<T> page, String hql, Map<String, Object> params) {
+	public Page findPageSQL(Page<Object[]> page, final String sql,final Map<String, Object> params) {
+		if(page.isAutoCount()){
+			page.setTotalCount(this.countSqlResult(sql, params));
+		}
+		final int firstResult = page.getFirst() - 1; //起始页
+		final int maxResults = page.getPageSize(); //每页最大数据量 
+		List<Object[]> list = this.getHibernateTemplate().executeFind(new HibernateCallback<T>() {
+			@Override
+			public T doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				SQLQuery sqlQuery = session.createSQLQuery(sql);
+				if(null != params){
+					sqlQuery.setProperties(params);
+				}
+				sqlQuery.setFirstResult(firstResult);
+				sqlQuery.setMaxResults(maxResults);
+				return (T)sqlQuery.list();
+			}
+		});
 		
-		return null;
-	}
-
-	@Override
-	public Page<T> findPageSQL(Page<T> page, String sql,
-			Map<String, Object> params) {
-		
-		return null;
+		page.setResult(list);
+		return page;
 	}
 
 	@Override
 	public long countHqlResult(String hql, Map<String, Object> values) {
-		
-		return 0;
+		hql = hql.toLowerCase();
+		hql = "select count(*) from" + StringUtils.substringAfter(hql, "from");
+		hql = StringUtils.substringBefore(hql, "order by");
+		return (Long)this.queryByParamUnique(hql, values);
 	}
 
 	@Override
-	public long countSqlResult(String sql, Map<String, Object> values) {
-		
-		return 0;
+	public long countSqlResult(String sql, final Map<String, Object> values) {
+		sql = sql.toLowerCase();
+		sql = "select count(*) from" + StringUtils.substringAfter(sql, "from");
+		final String countsql = StringUtils.substringBefore(sql, "order by");
+		return (Long)this.getHibernateTemplate().execute(new HibernateCallback<Long>() {
+			@Override
+			public Long doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				SQLQuery sqlQuery = session.createSQLQuery(countsql);
+				if(null != values){
+					sqlQuery.setProperties(values);
+				}
+				BigInteger result = (BigInteger) sqlQuery.uniqueResult();
+				Long count = null == result ? 0l : result.longValue();
+				return count;
+			}
+		});
 	}
 
 	@Override
 	public int findAllCount(Class<T> type) {
-		
-		return 0;
+		final String countHql = "select count(*) from " + type.getSimpleName();
+		return (Integer) this.getHibernateTemplate().execute(new HibernateCallback<Object>() {
+			@Override
+			public Object doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				return session.createQuery(countHql).uniqueResult();
+			}
+		});
 	}
 
+	//eg : update User set passWord=? where openId=?
 	@Override
 	public int batchExcute(String hql, Map<String, Object> map) {
-		
-		return 0;
+		return this.getHibernateTemplate().bulkUpdate(hql, map.values().toArray());
 	}
 
+	//eg : update t_user set passWord=:passWord where openId=:openId
 	@Override
-	public int batchExcuteSql(String sql, Map<String, Object> map) {
-		
-		return 0;
+	public int batchExcuteSql(final String sql, final Map<String, Object> map) {
+		return (Integer)this.getHibernateTemplate().execute(new HibernateCallback<Integer>() {
+			@Override
+			public Integer doInHibernate(Session session) throws HibernateException,
+					SQLException {
+				SQLQuery sqlQuery = session.createSQLQuery(sql);
+				if(null != map){
+					sqlQuery.setProperties(map);
+				}
+				return sqlQuery.executeUpdate();
+			}
+		});
 	}
 
 	@Override
 	public Session getHibernaterSession() {
-		
-		return null;
+		return this.getSession();
 	}
 
 	@Override
 	public boolean executeStoreProcedure(String name, Map<Integer, String> map) {
-		
 		return false;
 	}
 
 	@Override
-	public Object executeFunction(String name,
-			Map<Integer, ? extends Object> map, Class entityClass) {
+	public Object executeFunction(String name,Map<Integer, ? extends Object> map, Class<T> entityClass) {
 		
 		return null;
 	}

@@ -10,7 +10,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	
 	@Override
 	public User getUser(int id) {
-		return find(User.class, 1);
+		return this.find(User.class, 1);
 	}
 
 }
