@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -55,8 +53,8 @@ public class UserTest {
 //        user = (User) page.getResult().get(0);
 //        Object[] object = (Object[]) page.getResult().get(0);
 //        logger.info("totalCount:"+page.getTotalCount()+",number:"+page.getResult().size()+",提取的姓名："+object[1]);
-//        logger.info(this.baseDaoImpl.batchExcute("update User set passWord=? where openId=?", map));
-        logger.info(this.baseDaoImpl.batchExcuteSql("update t_user set passWord=:passWord where openId=:openId", map));
+        logger.info(this.baseDaoImpl.batchExcute("update User set passWord=? where openId=?", map));
+//        logger.info(this.baseDaoImpl.batchExcuteSql("update t_user set passWord=:passWord where openId=:openId", map));
         
 	}
 }

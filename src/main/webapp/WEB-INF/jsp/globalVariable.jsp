@@ -70,6 +70,6 @@
 %>
 <link rel="shortcut icon" href="<%=basePath%>/images/icon.png"/>
 <script src="<%=path%>/js/jquery/jquery-1.9.0.js" type="text/javascript"></script>
-<script src="<%=path%>/js/jquery-easyui-1.4.4/jquery.easyui.min.js" type="text/javascript"></script>
-<link href="<%=path%>/js/jquery-easyui-1.4.4/themes/default/easyui.css" rel="stylesheet" type="text/css" />
-<link href="<%=path%>/js/jquery-easyui-1.4.4/themes/icon.css" rel="stylesheet" type="text/css" />
+<script src="<%=path%>/js/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
+<link href="<%=path%>/js/jquery-easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link href="<%=path%>/js/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
