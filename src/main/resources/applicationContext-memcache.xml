@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- memcache缓存服务器配置 -->
+	<context:property-placeholder location="classpath:memcache.properties" ignore-unresolvable="true"/>
+	<bean id="memcachedPool" class="com.whalin.MemCached.SockIOPool"
+		factory-method="getInstance" init-method="initialize" destroy-method="shutDown">
+		<constructor-arg>
+			<value>neeaMemcachedPool</value>
+		</constructor-arg>
+		<property name="servers">
+			<list>
+				<value>${memcache.server}</value>
+			</list>
+		</property>
+		<!--多服务器负载均衡  
+        <property name="weights">    
+            <value>1,1</value>    
+        </property> -->
+		<property name="initConn">
+			<value>${memcache.initConn}</value>
+		</property>
+		<property name="minConn">
+			<value>${memcache.minConn}</value>
+		</property>
+		<property name="maxConn">
+			<value>${memcache.maxConn}</value>
+		</property>
+		<property name="maintSleep">
+			<value>${memcache.maintSleep}</value>
+		</property>
+		<property name="nagle">
+			<value>${memcache.nagle}</value>
+		</property>
+		<property name="socketTO">
+			<value>${memcache.socketTO}</value>
+		</property>
+	</bean>
+	<bean id="memcachedClient" class="com.whalin.MemCached.MemCachedClient">
+		<constructor-arg>
+			<value>neeaMemcachedPool</value>
+		</constructor-arg>
+		<property name="primitiveAsString">  
+            <value>true</value>  
+        </property>  
+        <property name="defaultEncoding">  
+            <value>utf-8</value>  
+        </property>  
+        <!-- 压缩模式 ,如果 cache数据 大于4 KB  就启用压缩-->
+        <!-- <property name="compressEnable">  
+            <value>true</value>  
+        </property>  
+        <property name="compressThreshold">  
+            <value>4096</value>  
+        </property> -->
+	</bean>
+</beans>

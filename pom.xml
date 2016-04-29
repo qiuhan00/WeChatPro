@@ -215,6 +215,12 @@
 			<!--本地jar的路径,相对或者绝对都可以 -->
 			<systemPath>F:/git/wechat4j/wechat4j/target/wechat4j-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
+		<!-- memcache缓存服务器 -->
+		<dependency>
+			<groupId>com.whalin</groupId>
+			<artifactId>Memcached-Java-Client</artifactId>
+			<version>3.0.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
