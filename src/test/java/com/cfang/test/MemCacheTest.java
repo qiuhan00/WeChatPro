@@ -1,7 +1,5 @@
 package com.cfang.test;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -28,7 +26,7 @@ public class MemCacheTest {
 	@Test
 	public void testMem(){
 //		memcachedClient.set("name", "cfang");
-		memcachedClient.delete("name");
+//		memcachedClient.delete("name");
 		logger.info("提取的姓名："+memcachedClient.get("name"));
 	}
 }

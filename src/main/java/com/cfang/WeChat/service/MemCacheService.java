@@ -27,7 +27,7 @@ public interface MemCacheService {
     
     boolean replace(String key, Object value);
     
-    Map<String, Object> getMulti(String[] keys);//获取多条数据
+    Map<String, Object> getMulti(String[] keys);//获取多条缓存数据
   
     boolean flushAll();//清空所有服务器缓存
 }

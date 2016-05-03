@@ -45,7 +45,7 @@ public class UserTest {
 //		List<User> list = this.baseDaoImpl.queryParams("from User where id=:id", map,0,1, false);
 //		logger.info("number:"+list.size()+",提取姓名："+list.get(0).getUserName());
 //		user = (User) this.baseDaoImpl.queryByParamUnique("from User where id=:id", map);
-//		logger.info("提取的姓名："+user.getUserName());
+		logger.info("提取的姓名："+user.getUserName());
 		Page page = new Page();
 		page.setPageNo(2);//起始页，默认1开始
         page.setPageSize(1);
@@ -53,7 +53,7 @@ public class UserTest {
 //        user = (User) page.getResult().get(0);
 //        Object[] object = (Object[]) page.getResult().get(0);
 //        logger.info("totalCount:"+page.getTotalCount()+",number:"+page.getResult().size()+",提取的姓名："+object[1]);
-        logger.info(this.baseDaoImpl.batchExcute("update User set passWord=? where openId=?", map));
+//        logger.info(this.baseDaoImpl.batchExcute("update User set passWord=? where openId=?", map));
 //        logger.info(this.baseDaoImpl.batchExcuteSql("update t_user set passWord=:passWord where openId=:openId", map));
         
 	}

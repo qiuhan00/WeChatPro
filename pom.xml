@@ -207,13 +207,13 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.21</version>
 		</dependency>
+		<!-- 本地jar依赖 -->
 		<dependency>
 			<groupId>wechat4j</groupId>
 			<artifactId>wechat4j</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>system</scope>
-			<!--本地jar的路径,相对或者绝对都可以 -->
-			<systemPath>F:/git/wechat4j/wechat4j/target/wechat4j-0.0.1-SNAPSHOT.jar</systemPath>
+			<systemPath>${project.basedir}/lib/wechat4j-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
 		<!-- memcache缓存服务器 -->
 		<dependency>
@@ -241,6 +241,28 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
+					<compilerArguments>
+						<extdirs>${project.basedir}/lib/</extdirs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<warName>${project.artifactId}</warName>
+					<!-- lib下所有jar包打入WEB-INF/lib目录下 -->
+					<webResources>
+						<resource>
+							<directory>${project.basedir}/lib/</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+							<includes>
+								<include>**/*.jar</include>
+							</includes>
+						</resource>
+					</webResources>
 				</configuration>
 			</plugin>
 		</plugins>
