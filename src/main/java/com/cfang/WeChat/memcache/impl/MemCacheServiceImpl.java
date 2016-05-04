@@ -1,12 +1,16 @@
-package com.cfang.WeChat.service.impl;
+package com.cfang.WeChat.memcache.impl;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.cfang.WeChat.service.MemCacheService;
+import org.springframework.stereotype.Service;
+
+import com.cfang.WeChat.memcache.MemCacheService;
 import com.whalin.MemCached.MemCachedClient;
 
+@Service(value="memCacheServiceImpl")
 public class MemCacheServiceImpl implements MemCacheService {
 	
 	@Resource(name="memcachedClient")
@@ -50,6 +54,11 @@ public class MemCacheServiceImpl implements MemCacheService {
 	@Override
 	public Map<String, Object> getMulti(String[] keys) {
 		return memCachedClient.getMulti(keys);
+	}
+
+	@Override
+	public boolean set(String key, Object value, Date ExpireTime) {
+		return memCachedClient.set(key, value, ExpireTime);
 	}
 
 }

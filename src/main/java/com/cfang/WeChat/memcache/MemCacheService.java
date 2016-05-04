@@ -1,5 +1,6 @@
-package com.cfang.WeChat.service;
+package com.cfang.WeChat.memcache;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -18,6 +19,8 @@ public interface MemCacheService {
 	Object get(String key);
 	
 	boolean set(String key, Object value);  
+	
+	boolean set(String key, Object value, Date ExpireTime);  
 	  
     boolean cas(String key, String value, long unique);  
       
