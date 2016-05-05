@@ -19,6 +19,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	public List<User> getUser() {
 		return this.queryParams("from User", null, Boolean.FALSE);
 	}
+
+	@Override
+	public User getUser(String name) {
+		return this.queryByParamUnique("from User where userName='"+name+"'", null);
+	}
 	
 	
 

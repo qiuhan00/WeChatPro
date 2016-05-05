@@ -58,7 +58,7 @@ public class Constant {
 	 */
 	public static final class LoginManage {
 		/** 表示层资源ID：登录页面 */
-		public static final String VIEW_LOGIN_PAGE = "/login/loginBack";
+		public static final String VIEW_LOGIN_PAGE = "/login/login";
 
 		/** 表示层资源ID：主界面 */
 		public static final String VIEW_MAIN_PAGE = "/login/backStage";

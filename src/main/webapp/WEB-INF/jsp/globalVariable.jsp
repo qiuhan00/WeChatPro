@@ -7,7 +7,8 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <% 
  /**基本上下文路径*/
- String path = request.getContextPath();  
+ String path = request.getContextPath(); 
+
  String basePath = request.getScheme() + "://"  
               + request.getServerName() + ":" + request.getServerPort() + path ;
  pageContext.setAttribute("HOME",basePath);
@@ -69,7 +70,7 @@
 	}
 %>
 <link rel="shortcut icon" href="<%=basePath%>/images/icon.png"/>
-<script src="<%=path%>/js/jquery/jquery-1.9.0.js" type="text/javascript"></script>
+<script src="<%=path%>/js/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
 <script src="<%=path%>/js/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>
 <link href="<%=path%>/js/jquery-easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
 <link href="<%=path%>/js/jquery-easyui/themes/icon.css" rel="stylesheet" type="text/css" />
