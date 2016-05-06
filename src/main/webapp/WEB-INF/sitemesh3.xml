@@ -7,14 +7,15 @@
 	<mime-type>application/xhtml+xml</mime-type>
 
 	<!-- 默认装饰器，当下面的路径都不匹配时，启用该装饰器进行装饰 -->
-	<mapping decorator="/WEB-INF/jsp/decorator/default.jsp" />
+	<mapping path="/*" decorator="/WEB-INF/jsp/decorator/default.jsp" />
 
+	<!-- 排除，不进行装饰的路径 -->
+	<mapping path="/wechatPro/*" exclue="true"/>
+	<!-- <mapping path="/login.jsp" exclue="true"/> -->
+	
 	<!-- 对不同的路径，启用不同的装饰器 -->
 	<mapping path="/admin/*" decorator="/another-decorator.html" />
 	<mapping path="/*.special.jsp" decorator="/special-decorator.html" />
-	
-	<!-- 排除，不进行装饰的路径 -->
-	<mapping path="/login/*" exclue="true"/>
 	
 	<!-- 对同一路径，启用多个装饰器 -->
 	<!-- <mapping>
