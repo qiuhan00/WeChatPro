@@ -6,6 +6,7 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -22,6 +23,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		
 		return null;
 	}
 
@@ -30,12 +32,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
-		String userName = (String) authcToken.getPrincipal();
-		User user = userService.getUser(userName);
-		if(user==null){
-		      throw new UnknownAccountException("没有找到该账号");
+		System.out.println("11111111111111111111111");
+		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+		User user = this.userService.getUser(token.getUsername());
+		SimpleAuthenticationInfo info = null;
+		if(null != user){
+			info = new SimpleAuthenticationInfo(user.getUserName(), user.getPassWord(), getName());
 		}
-		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUserName(), user.getPassWord(), getName());
 		return info;
 	}
 	

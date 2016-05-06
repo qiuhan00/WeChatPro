@@ -10,14 +10,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>login</title>
-	<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=no"/>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
     <link href="${HOME }/css/login.css?v=4" rel="stylesheet" type="text/css" />
      <link href="${HOME}/css/base.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="login">
 <div class="loginBg">
-   <form id="loginForm" action="index.a" method="post" >
+   <form id="loginForm" action="test" method="post" >
    <div class=" login_form">
    <div class=" loginFormInner">
    <p class=" error red">
@@ -30,8 +30,9 @@
 	}
 	%>
    	</p>
-   	<div class="logo"></div>
+   <!-- 	<div class="logo"></div> -->
    <h1>后台管理系统</h1>
+   <h2>${errorMsg }</h2>
    <p>
    		<input type="text" required id="uname" name="username" value="" placeholder="用户名"/> 
    </p>
