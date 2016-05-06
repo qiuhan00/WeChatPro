@@ -31,3 +31,24 @@ CREATE TABLE `t_access_token` (
   `userHeadImage` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop TABLE if EXISTS t_role;
+CREATE TABLE `t_role` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `rolename` varchar(45) DEFAULT NULL,
+  `rolecode` varchar(10) DEFAULT NULL,
+  `roledesc` varchar(45) DEFAULT NULL,
+  `createtime` date NOT NULL,
+  `updatetime` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop TABLE if EXISTS t_permission;
+CREATE TABLE `t_permission` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `permname` varchar(45) DEFAULT NULL,
+  `permcode` varchar(10) DEFAULT NULL,
+  `createtime` date NOT NULL,
+  `updatetime` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
