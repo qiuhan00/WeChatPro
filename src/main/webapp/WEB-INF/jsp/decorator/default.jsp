@@ -3,7 +3,7 @@
 <html>  
 <head>  
 <title>SiteMesh示例-<sitemesh:write property='title'/></title>  
-<sitemesh:write property='head'/>  
+<sitemesh:write property='head'/>
 </head>  
 <body>  
  <%-- <%@ include file="/WEB-INF/jsp/decorator/header.jsp"%>  --%> 

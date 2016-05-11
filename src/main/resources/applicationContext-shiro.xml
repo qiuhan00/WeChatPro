@@ -27,7 +27,7 @@
 		<!-- shiro核心安全登录接口 -->
 		<property name="securityManager" ref="securityManager"/>
 		<!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->  
-		<property name="loginUrl" value="/wechatPro/index"/>
+		<property name="loginUrl" value="/login/index"/>
 		<!-- 登录成功后要跳转的链接 -->
 		<!-- <property name="successUrl" value="/system/main"/> -->  
     	<!-- 用户访问未对其授权的资源时,所显示的连接 -->  
@@ -50,7 +50,7 @@
 	            /user/add=roles[manage]
 	            /user/del/**=roles[manage]
 	            /user/edit/**=roles[manage]
-	            /wechatPro/**=anon
+	            /login/**=anon
 	            <!-- 所有的请求(除去配置的静态资源地址以及请求地址为anon的)都要通过登录验证，如果未登录则跳转登录页/wechatPro/index -->
 	            /**=authc
         	</value>  

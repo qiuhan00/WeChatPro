@@ -12,12 +12,12 @@
     <title>login</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
     <link href="${HOME }/css/login.css?v=4" rel="stylesheet" type="text/css" />
-     <link href="${HOME}/css/base.css" rel="stylesheet" type="text/css" />
+    <link href="${HOME}/css/base.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div id="login">
 <div class="loginBg">
-   <form id="loginForm" action="test" method="post" >
+   <form id="loginForm" action="toLogin" method="post" >
    <div class=" login_form">
    <div class=" loginFormInner">
    <p class=" error red">

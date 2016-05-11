@@ -41,8 +41,9 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
       <property name="basename" value="messages"/>
     </bean> -->
     
+    <!-- 对静态资源文件的访问，交给default servlet handler处理 -->
+    <mvc:default-servlet-handler/>
 	<!--
 	静态资源(js/image/html...)的访问  
-	<mvc:default-servlet-handler/>
     <mvc:resources location="/js/" mapping="/js/**"/> -->
 </beans>

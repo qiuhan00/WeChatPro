@@ -12,5 +12,7 @@ public class Test {
 		map.put("passWord", "123321");
 //		map.put("openId", "o_sadfsdfe");
 		System.out.println(map.values().toArray()[0] + "|" +map.values().toArray()[1]);
+		
+		System.out.println(1+'a');
 	}
 }
