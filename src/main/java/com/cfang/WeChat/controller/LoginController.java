@@ -43,6 +43,13 @@ public class LoginController {
 		return view;
 	}
 	
+	@RequestMapping(value="/logout")
+	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response){
+		ModelAndView view = new ModelAndView("redirect:/login/index");
+		SecurityUtils.getSubject().logout();
+		return view;
+	}
+	
 	@RequestMapping(value="/loadMenu")
 	public ModelAndView loadMenu(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		String s1 = "{id:1, pId:0, name:\"test1\",click:false}";  

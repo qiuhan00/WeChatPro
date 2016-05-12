@@ -68,8 +68,9 @@
 		</property>
 		<!-- 配置hiberntae拦截器,对公共字段操作 -->
 		<!-- <property name="entityInterceptor">
-		    <bean id="hibernateInterceptors" class="com.cfang.WeChat.interceptor.HibernateInterceptors"/>
-		</property> -->
+		    <bean id="hibernateInterceptors" class="com.cfang.WeChat.interceptor.HibernateInterceptors"/> 
+		    <ref bean="hibernateInterceptors"/>
+		</property>-->
     </bean>
     
     <!-- 配置一个事务管理器 -->

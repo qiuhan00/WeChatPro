@@ -35,15 +35,15 @@ public class MemCacheTest {
 	
 	@Test
 	public void testMem(){
-//		memcachedClient.set("999", "cfang");
+		memcachedClient.set("999", "cfang");
 //		memcachedClient.delete("findUserById_BDA6203EA0E67EB01603A7E5993ECD95");
 //		logger.info("提取的姓名："+memcachedClient.get("999"));
 //		User user = this.userService.getUser(2);
 //		logger.info("提取的姓名："+user.getUserName());
 		
-		List<User> user = this.userService.getUser();
-		logger.info("提取, size:"+user.size()+"|name:" + user.get(0).getUserName());
-		
-		logger.info("memcache提取的姓名："+ this.memCacheService.get("findUsers_BDA6203EA0E67EB01603A7E5993ECD95"));
+//		List<User> user = this.userService.getUser();
+//		logger.info("提取, size:"+user.size()+"|name:" + user.get(0).getUserName());
+//		
+//		logger.info("memcache提取的姓名："+ this.memCacheService.get("findUsers_BDA6203EA0E67EB01603A7E5993ECD95"));
 	}
 }

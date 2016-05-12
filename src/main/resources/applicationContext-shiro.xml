@@ -40,6 +40,7 @@
         <property name="filterChainDefinitions">  
         	<value>  
         	    <!-- anon表示此地址下不需要任何访问权限均可访问 -->
+        	    /logout = logout
 	            /css/** = anon
 	            /images/** = anon
 	            /js/** = anon
@@ -50,6 +51,7 @@
 	            /user/add=roles[manage]
 	            /user/del/**=roles[manage]
 	            /user/edit/**=roles[manage]
+	            /login/find=roles[admin]
 	            /login/**=anon
 	            <!-- 所有的请求(除去配置的静态资源地址以及请求地址为anon的)都要通过登录验证，如果未登录则跳转登录页/wechatPro/index -->
 	            /**=authc

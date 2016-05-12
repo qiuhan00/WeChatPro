@@ -16,12 +16,12 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.openejb</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>5.0-1</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency> -->
 		<!-- 提供对c标签的支持 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -43,6 +43,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-commons-annotations</artifactId>
+			<version>3.2.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -217,9 +222,6 @@
 			<artifactId>sitemesh</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		<!-- <dependency> <groupId>opensymphony</groupId> <artifactId>sitemesh</artifactId> 
-			<version>2.4.1</version> </dependency> -->
-		
 	</dependencies>
 	<build>
 		<plugins>

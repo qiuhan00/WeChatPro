@@ -1,5 +1,4 @@
-<%@page
-	import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter"%>
+<%@page import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter"%>
 <%@ include file="/WEB-INF/jsp/globalVariable.jsp"%>
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ taglib prefix="spring" uri="/spring.tld"%>
@@ -10,15 +9,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>login</title>
-<meta name="viewport"
-	content="width=device-width,initial-scale=1.0,user-scalable=no" />
-<link rel="stylesheet"
-	href="${HOME}/js/zTree/css/zTreeStyle/zTreeStyle.css" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+<link rel="stylesheet" href="${HOME}/js/zTree/css/zTreeStyle/zTreeStyle.css" />
 <link href="${HOME}/css/base.css" rel="stylesheet" type="text/css" />
 <script src="${HOME}/js/zTree/jquery.ztree.core.js"></script>
 <script src="${HOME}/js/user/index.js"></script>
 </head>
 <body>
+	<shiro:hasRole name="manager">manager角色登录显示此内容</shiro:hasRole>  
+    <shiro:hasRole name="admin">admin角色登录显示此内容</shiro:hasRole>  
+    <shiro:hasRole name="normal">normal角色登录显示此内容</shiro:hasRole>
 	<table class="easyui-datagrid">
 		<thead>  
         <tr>  
@@ -36,5 +36,9 @@
         </tr>  
     </tbody> 
 	</table>
+	
+	<script type="text/javascript">
+		var path = "${path}";
+	</script>
 </body>
 </html>

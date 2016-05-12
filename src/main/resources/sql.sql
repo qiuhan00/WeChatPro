@@ -41,14 +41,26 @@ CREATE TABLE `t_role` (
   `createtime` date NOT NULL,
   `updatetime` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 drop TABLE if EXISTS t_permission;
 CREATE TABLE `t_permission` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `permname` varchar(45) DEFAULT NULL,
   `permcode` varchar(10) DEFAULT NULL,
+  `roleid` int(10) DEFAULT NULL,
   `createtime` date NOT NULL,
   `updatetime` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+drop table if exists t_user_role;
+CREATE TABLE `t_user_role` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) DEFAULT NULL,
+  `role_id` int(10) DEFAULT NULL,
+  `createtime` date NOT NULL,
+  `updatetime` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+

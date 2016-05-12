@@ -6,6 +6,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
+import org.springframework.stereotype.Component;
 
 /**
  * hibernate拦截器，处理操作过程中更新公共的字段,eg: createtime、updatetime、操作用户名等
@@ -13,19 +14,20 @@ import org.hibernate.type.Type;
  * @author Alex.Fang
  * @version 2016-4-27 下午4:54:09
  */
+//@Component(value="hibernateInterceptors")
 public class HibernateInterceptors extends EmptyInterceptor {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger
-			.getLogger(HibernateInterceptors.class);
+	private static final Logger log = Logger.getLogger(HibernateInterceptors.class);
 
-	private static final String createtime = "createtime";
+	private static final String createtime = "createTime";
 	private static final String updatetime = "updatetime";
 
 	@Override
 	public boolean onSave(Object entity, Serializable id, Object[] state,
 			String[] propertyNames, Type[] types) {
+		System.out.println("111111111111");
 		for (int i = 0; i < propertyNames.length; i++) {
 			if (propertyNames[i].equals(createtime)) { // 找到创建日期并赋值
 				if (null == state[i]) {

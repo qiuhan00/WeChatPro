@@ -20,19 +20,8 @@
    <form id="loginForm" action="toLogin" method="post" >
    <div class=" login_form">
    <div class=" loginFormInner">
-   <p class=" error red">
-   	<%
-	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
-	if(error != null){
-	%>
-			登录失败，请重试.
-	<%
-	}
-	%>
-   	</p>
-   <!-- 	<div class="logo"></div> -->
    <h1>后台管理系统</h1>
-   <h2>${errorMsg }</h2>
+   <p style="text-align:center;color:red">${errorMsg}</p>
    <p>
    		<input type="text" required id="uname" name="username" value="" placeholder="用户名"/> 
    </p>
