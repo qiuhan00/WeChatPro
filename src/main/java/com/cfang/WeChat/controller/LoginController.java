@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,12 +44,17 @@ public class LoginController {
 		return view;
 	}
 	
-	@RequestMapping(value="/logout")
-	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response){
-		ModelAndView view = new ModelAndView("redirect:/login/index");
-		SecurityUtils.getSubject().logout();
-		return view;
-	}
+//	@RequestMapping(value="/logout")
+//	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response){
+//		ModelAndView view = new ModelAndView("redirect:/login/index");
+//		SecurityUtils.getSubject().logout();
+//		return view;
+//	}
+	
+	@RequestMapping("/403")  
+    public ModelAndView unauthorizedRole(){  
+        return new ModelAndView("/common/403");
+    }  
 	
 	@RequestMapping(value="/loadMenu")
 	public ModelAndView loadMenu(HttpServletRequest request, HttpServletResponse response) throws Exception{

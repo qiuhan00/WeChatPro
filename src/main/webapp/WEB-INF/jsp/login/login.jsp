@@ -25,7 +25,7 @@
    <p>
    		<input type="text" required id="uname" name="username" value="" placeholder="用户名"/> 
    </p>
-   <p class=" spasial"> 
+   <p class="spasial"> 
 		<input required type="password" id="passwd" name="password" value="" placeholder="密码"/> 
 	</p>
    </div>

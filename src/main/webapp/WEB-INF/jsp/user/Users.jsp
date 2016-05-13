@@ -10,15 +10,11 @@
 <head>
 <title>login</title>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
-<link rel="stylesheet" href="${HOME}/js/zTree/css/zTreeStyle/zTreeStyle.css" />
-<link href="${HOME}/css/base.css" rel="stylesheet" type="text/css" />
-<script src="${HOME}/js/zTree/jquery.ztree.core.js"></script>
-<script src="${HOME}/js/user/index.js"></script>
 </head>
 <body>
-	<shiro:hasRole name="manager">manager角色登录显示此内容</shiro:hasRole>  
+<%-- 	<shiro:hasRole name="manager">manager角色登录显示此内容</shiro:hasRole>  
     <shiro:hasRole name="admin">admin角色登录显示此内容</shiro:hasRole>  
-    <shiro:hasRole name="normal">normal角色登录显示此内容</shiro:hasRole>
+    <shiro:hasRole name="normal">normal角色登录显示此内容</shiro:hasRole> --%>
 	<table class="easyui-datagrid">
 		<thead>  
         <tr>  

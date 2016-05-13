@@ -68,7 +68,13 @@
 	{
 	    request.setAttribute("platform", "mo9");
 	}
-%>
+	
+/* 	response.setHeader("Cache-Control", "no-cache");
+    response.setHeader("Cache-Control", "no-store");
+    response.setDateHeader("Expires", 0);
+    response.setHeader("Pragma", "no-cache");
+ */
+ %>
 <link rel="shortcut icon" href="<%=basePath%>/images/icon.png"/>
 <script src="<%=path%>/js/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>
 <script src="<%=path%>/js/jquery-easyui/jquery.easyui.min.js" type="text/javascript"></script>

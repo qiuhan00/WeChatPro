@@ -62,7 +62,7 @@ public class User extends BaseEntity{
 		List<Role> roles=getRoleList();  
         Set<String> set=new HashSet<String>();  
         for (Role role : roles) {  
-            set.add(role.getRolename());  
+            set.add(role.getRolecode());  
         }  
         return set; 
 	}

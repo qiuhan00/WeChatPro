@@ -78,8 +78,8 @@
         <property name="sessionFactory" ref="sessionFactory"/>  
     </bean>
     
-    <!-- 开启注解事务 -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <!-- 开启注解事务 , proxy-target-class:true-基于类， false-基于接口-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false"/>
     
     <!-- 事务异常封装 -->
     <bean id="exceptionResolver" class="com.cfang.WeChat.exception.MyExceptionHandler"/>

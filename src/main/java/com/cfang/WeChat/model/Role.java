@@ -73,7 +73,8 @@ public class Role extends BaseEntity {
 		this.userList = userList;
 	}
 
-	@OneToMany(mappedBy="role")
+	@OneToMany(mappedBy="role", fetch=FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	public List<Permission> getPermissionList() {
 		return permissionList;
 	}
