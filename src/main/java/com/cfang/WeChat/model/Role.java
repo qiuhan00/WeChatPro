@@ -2,6 +2,7 @@ package com.cfang.WeChat.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,6 +35,8 @@ public class Role extends BaseEntity {
 	private List<User> userList;//一个角色对应多个用户   
 	
 	private List<Permission> permissionList;
+	
+	private Set<OperatorResource> resources; //权限所拥有的资源
 	
 	@Column(name="rolename")
 	public String getRolename() {
@@ -91,6 +94,16 @@ public class Role extends BaseEntity {
             list.add(per.getPermcode());  
         }  
         return list;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name="t_role2resource", joinColumns={@JoinColumn(name="role_code")}, inverseJoinColumns={@JoinColumn(name="resource_code")})
+	public Set<OperatorResource> getResources() {
+		return resources;
+	}
+
+	public void setResources(Set<OperatorResource> resources) {
+		this.resources = resources;
 	}
 
 }

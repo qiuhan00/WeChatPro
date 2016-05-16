@@ -64,3 +64,26 @@ CREATE TABLE `t_user_role` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+drop table if exists t_operator_resource;
+CREATE TABLE `t_operator_resource` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `resourceName` varchar(20) DEFAULT NULL,
+  `description` varchar(30) DEFAULT NULL,
+  `resourceURL` varchar(60) NOT NULL,
+  `index` int(10) DEFAULT NULL,
+  `status` varchar(2) DEFAULT NULL,
+  `parent_id` int(10) NOT NULL,
+  `createtime` date NOT NULL,
+  `updatetime` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+drop table if exists t_role2resource;
+CREATE TABLE `t_role2resource` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `resource_code` int(10) NOT NULL,
+  `role_code` int(10) NOT NULL,
+  `createtime` date NOT NULL,
+  `updatetime` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

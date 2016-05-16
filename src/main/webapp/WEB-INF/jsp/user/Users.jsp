@@ -15,62 +15,71 @@
 	<div>
 		<form id="searchForm">
 			<p>
-				<b>用户名：</b> <input type="text" name="username" class="easyui-validatebox" /> 
-				<b>创建时间：</b> 
-				<input id="startDate" name="startDate" type="text" class="easyui-datebox" style="width: 100px;"
+				<b>用户名：</b> <input type="text" name="userName" class="easyui-validatebox" /> 
+				<b>创建时间：</b> <input id="startDate" name="startDate" type="text" class="easyui-datebox" style="width: 100px;"
 					data-options="formatter:myformatter,parser:myparser" /> 
-					至 <input id="endDate" name="endDate" type="text" class="easyui-datebox"
-					style="width:100px;" data-options="formatter:myformatter,parser:myparser" />
+					至 <input id="endDate" name="endDate" type="text" class="easyui-datebox" style="width: 100px;"
+					data-options="formatter:myformatter,parser:myparser" />
+				<a href="javascript:void(0)" id="search" class="easyui-linkbutton" 
+				data-options="iconCls:'icon-search'">查询</a>
 			</p>
 		</form>
 	</div>
-	<table class="easyui-datagrid">
-		<thead>
-			<tr>
-				<th data-options="field:'code'">Code</th>
-				<th data-options="field:'name'">Name</th>
-				<th data-options="field:'price'">Price</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>001</td>
-				<td>name1</td>
-				<td>2323</td>
-			</tr>
-			<tr>
-				<td>002</td>
-				<td>name2</td>
-				<td>4612</td>
-			</tr>
-		</tbody>
-	</table>
-
+	<div>
+		<table class="easyui-datagrid" id="tt" fitColumns=true url="${path }/login/find">
+		</table>
+	</div>
+	<script src="${HOME }/js/user/common.js"></script>
 	<script type="text/javascript">
 		var path = "${path}";
+		var isFirst = true;
 		$(function() {
-
+			init();
+			$("#search").click(function() {
+				search();
+			});
 		});
-		function myformatter(date) {
-			var y = date.getFullYear();
-			var m = date.getMonth() + 1;
-			var d = date.getDate();
-			return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+		
+		function search(){
+			$('#tt').datagrid('load', getJson4Form("searchForm"));  
 		}
-
-		function myparser(s) {
-			if (!s)
-				return new Date();
-			var ss = (s.split('-'));
-			var y = parseInt(ss[0], 10);
-			var m = parseInt(ss[1], 10);
-			var d = parseInt(ss[2], 10);
-			if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-				return new Date(y, m - 1, d);
-			} else {
-				return new Date();
-			}
-		}
+		
+		function init(){
+			$('#tt').datagrid({
+				pagination : true,
+				pageSize : 20,
+				pageList : [ 50, 40, 30, 20, 10 ],
+				showFooter : true,
+				columns : [ [ {
+					field : 'userName',
+					title : '用户名',
+					width : 150,
+					editor : {
+						type : 'validatebox',
+						options : {
+							required : 'true',
+							validType : 'length[1,100]'
+						}
+					}
+				},{
+					field : 'createTime',
+					title : '创建时间',
+					align : 'center',
+					width : 100
+				},{
+					field : 'openId',
+					title : 'openId',
+					align : 'center',
+					width : 80
+				}]],onBeforeLoad: function (param) {
+					if(isFirst){
+						isFirst = false;
+						search();
+					}
+				}
+			});
+		};
+		
 	</script>
 </body>
 </html>
