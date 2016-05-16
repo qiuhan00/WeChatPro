@@ -1,6 +1,8 @@
 package com.cfang.WeChat.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -115,18 +117,26 @@ public class OperatorResource extends BaseEntity {
 	 * @return
 	 */
 	public List<OperatorResource> loadSortedChildren() {
-		List<OperatorResource> subList = new ArrayList<OperatorResource>();
 		if (childs != null && !childs.isEmpty()) {
-			for (OperatorResource node : childs) {
-				int offset = 0;
-				for (offset = 0; offset < subList.size(); offset++) {
-					if (node.getIndex() < subList.get(offset).getIndex()) {
-						break;
-					}
+			Collections.sort(childs, new Comparator<OperatorResource>() {
+				public int compare(OperatorResource o1, OperatorResource o2) {
+					return o1.getId() - o2.getId();//升序
 				}
-				subList.add(offset, node);
-			}
+			});
 		}
-		return subList;
+		return childs;
+	}
+	
+	public static void main(String[] args){
+		List<Integer> list = new ArrayList<Integer>();
+		list.add(2);
+		list.add(1);
+		list.add(3);
+		Collections.sort(list, new Comparator<Integer>() {
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2;
+			}
+		});
+		System.out.println(list.toString());
 	}
 }
