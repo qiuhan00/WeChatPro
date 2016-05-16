@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="t_operator_resource")
@@ -116,6 +117,7 @@ public class OperatorResource extends BaseEntity {
 	 * 加载已排序的子菜单列表. loadSortedChildren:
 	 * @return
 	 */
+	@Transient
 	public List<OperatorResource> loadSortedChildren() {
 		if (childs != null && !childs.isEmpty()) {
 			Collections.sort(childs, new Comparator<OperatorResource>() {

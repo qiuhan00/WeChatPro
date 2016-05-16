@@ -2,6 +2,7 @@ package com.cfang.WeChat.utils;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
 /**
@@ -38,6 +40,11 @@ public class JsonUtils {
 		String jsonResult = JSON.toJSONString(map, filter);
 		render(response, jsonResult);
 	}
+	
+	//菜单序列化
+	public static void renderJson(HttpServletResponse response, List<?> object){
+		render(response, JSONArray.parseArray(object.toString()));
+	}
 
 	/**
 	 * 纯文本直接输出内容
@@ -45,7 +52,7 @@ public class JsonUtils {
 	 * @param response
 	 * @param json
 	 */
-	private static void render(HttpServletResponse response, String json) {
+	private static void render(HttpServletResponse response, Object json) {
 		PrintWriter out = null;
 		try {
 			String encoding = ENCODING_DEFAULT;
@@ -59,7 +66,7 @@ public class JsonUtils {
 				response.setDateHeader("Expires", 0);
 			}
 		    out = response.getWriter();
-		    out.write(json);
+		    out.print(json);
 		    out.flush();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

@@ -71,12 +71,7 @@
 					title : 'openId',
 					align : 'center',
 					width : 80
-				}]],onBeforeLoad: function (param) {
-					if(isFirst){
-						isFirst = false;
-						search();
-					}
-				}
+				}]]
 			});
 		};
 		

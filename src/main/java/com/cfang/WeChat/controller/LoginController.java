@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.cfang.WeChat.dao.UserDao;
+import com.cfang.WeChat.dto.UserDto;
 import com.cfang.WeChat.model.User;
 import com.cfang.WeChat.service.UserService;
 import com.cfang.WeChat.utils.Constant;
@@ -63,7 +64,7 @@ public class LoginController {
 	
 	@RequestMapping(value="/loadMenu")
 	public ModelAndView loadMenu(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String s1 = "{id:1, pId:0, name:\"test1\",click:false}";  
+		String s1 = "{id:1, pId:0, name:\"test1\",pwd:123,click:false}";  
         String s2 = "{id:2, pId:1, name:\"test2\" ,click:false, open:true}";  
         String s3 = "{id:3, pId:1, name:\"test3\",page:'https://www.baidu.com'}";  
         String s4 = "{id:4, pId:2, name:\"所有用户\",page: '/login/user' }";  
@@ -90,7 +91,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value="/find")
-	public ModelAndView find(HttpServletRequest request, HttpServletResponse response, UserDao userDto) throws Exception{
+	public ModelAndView find(HttpServletRequest request, HttpServletResponse response, UserDto userDto) throws Exception{
 		SimplePropertyPreFilter filter = new SimplePropertyPreFilter(User.class, "userName","openId","createTime");
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userName", "总计");
