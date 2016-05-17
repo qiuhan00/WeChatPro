@@ -1,16 +1,17 @@
 package com.cfang.WeChat.utils;
 
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 
 /**
@@ -42,8 +43,9 @@ public class JsonUtils {
 	}
 	
 	//菜单序列化
-	public static void renderJson(HttpServletResponse response, List<?> object){
-		render(response, JSONArray.parseArray(object.toString()));
+	public static void renderJson(HttpServletResponse response, Collection<?> object){
+//		render(response, JSONArray.parseArray(object.toString()));
+		render(response, JSONArray.fromObject(object));
 	}
 
 	/**

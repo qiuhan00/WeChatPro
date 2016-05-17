@@ -5,13 +5,15 @@ var setting = {
 		selectedMulti : false
 	},
 	data : {
+		//使用简单数据类型，也就是数组
 		simpleData : {
 			enable : true,
 			idKey : "id",
-			pIdKey : "pId",
+			pIdKey : "parent_id",
 			rootPId : 0
 		}
-	},callback:{
+	},
+	callback:{
 		onClick:openNew  //绑定菜单单击事件
 	}
 };
@@ -29,6 +31,7 @@ $(function() {
 			alert('请求失败');
 		},
 		success : function(data) { // 请求成功后处理函数。
+			alert(data);
 			$.fn.zTree.init($("#tree"), setting, data); // 把后台封装好的简单Json格式赋给
 			treeObj = $.fn.zTree.getZTreeObj("tree");//获取id为tree的zTree的对象
 		}
@@ -63,10 +66,10 @@ function openNew(event,treeId,treeNode){
 		$("#tabs").tabs("select",tabName);
 	}else{
 		var url;
-		if(treeNode.page.indexOf("www")!=-1){
-			url = treeNode.page ;
+		if(treeNode.resourceURL.indexOf("www")!=-1){
+			url = treeNode.resourceURL ;
 		}else{
-			url = path + treeNode.page ;
+			url = path + treeNode.resourceURL ;
 		}
 		$("#tabs").tabs("add",{
 			title : tabName,

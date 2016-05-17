@@ -1,10 +1,14 @@
 package com.cfang.WeChat.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
 import com.cfang.WeChat.dao.UserDao;
+import com.cfang.WeChat.model.OperatorResource;
 import com.cfang.WeChat.model.User;
 
 @Repository(value="userDaoImpl")
@@ -24,7 +28,4 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	public User getUser(String name) {
 		return this.queryByParamUnique("from User where userName='"+name+"'", null);
 	}
-	
-	
-
 }

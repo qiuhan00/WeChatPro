@@ -1,10 +1,12 @@
 package com.cfang.WeChat.controller;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +19,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.cfang.WeChat.dao.UserDao;
+import com.cfang.WeChat.dto.MenuDto;
 import com.cfang.WeChat.dto.UserDto;
+import com.cfang.WeChat.model.OperatorResource;
+import com.cfang.WeChat.model.Role;
 import com.cfang.WeChat.model.User;
 import com.cfang.WeChat.service.UserService;
 import com.cfang.WeChat.utils.Constant;
@@ -64,20 +67,20 @@ public class LoginController {
 	
 	@RequestMapping(value="/loadMenu")
 	public ModelAndView loadMenu(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String s1 = "{id:1, pId:0, name:\"test1\",pwd:123,click:false}";  
-        String s2 = "{id:2, pId:1, name:\"test2\" ,click:false, open:true}";  
-        String s3 = "{id:3, pId:1, name:\"test3\",page:'https://www.baidu.com'}";  
-        String s4 = "{id:4, pId:2, name:\"所有用户\",page: '/login/user' }";  
-        List<String> lstTree = new ArrayList<String>();  
-        lstTree.add(s1);  
-        lstTree.add(s2);  
-        lstTree.add(s3);  
-        lstTree.add(s4);  
-        response.setCharacterEncoding("utf-8");
-        PrintWriter out = response.getWriter();
-        out.print(JSONArray.parseArray(lstTree.toString()));
-		out.flush();
-		out.close();
+//		String s1 = "{id:1, parent_id:0, name:\"test1\",pwd:123,click:false}";  
+//        String s2 = "{id:2, parent_id:1, name:\"test2\" ,click:false, open:true}";  
+//        String s3 = "{id:3, parent_id:1, name:\"test3\",resourceURL:'https://www.baidu.com'}";  
+//        String s4 = "{id:4, parent_id:2, name:\"所有用户\",resourceURL: '/login/user' }";  
+//        List<String> lstTree = new ArrayList<String>();  
+//        lstTree.add(s1);  
+//        lstTree.add(s2);  
+//        lstTree.add(s3);  
+//        lstTree.add(s4);  
+//        JsonUtils.renderJson(response, lstTree);
+    	//加载菜单项
+        List<Role> list = this.userService.getUser((String)SecurityUtils.getSubject().getPrincipals().iterator().next()).getRoleList();
+    	Set<OperatorResource> resources = getUserResources(list);
+    	JsonUtils.renderJson(response, new ArrayList(resources));
 		return null;
 	}
 	
@@ -103,5 +106,30 @@ public class LoginController {
 		page.setResult(this.userService.getUser());
 		JsonUtils.renderJson(response, page, params, "", filter);
 		return null;
+	}
+	
+	private Set<OperatorResource> getUserResources(List<Role> list){
+		Set<OperatorResource> resources = new HashSet<OperatorResource>();
+		Iterator<Role> iterator = list.iterator();
+		while(iterator.hasNext()){
+			Role role = iterator.next();
+			for(Iterator<OperatorResource> it = role.getResources().iterator();it.hasNext();){  
+				resources.add(it.next()); 
+	        } 
+		}
+		return resources;
+	}
+	
+	private Set<MenuDto> getMenus(Set<OperatorResource> resources){
+		Set<MenuDto> result = new HashSet<MenuDto>();
+		MenuDto menuDto = null;
+		Iterator<OperatorResource> iterator = resources.iterator();
+		OperatorResource operatorResource = null;
+		while(iterator.hasNext()){
+			operatorResource = iterator.next();
+			menuDto = new MenuDto();
+			menuDto.setId(operatorResource.getId());
+		}
+		return result;
 	}
 }

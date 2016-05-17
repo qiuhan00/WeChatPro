@@ -2,7 +2,9 @@ package com.cfang.WeChat.dao;
 
 
 import java.util.List;
+import java.util.Set;
 
+import com.cfang.WeChat.model.OperatorResource;
 import com.cfang.WeChat.model.User;
 
 public interface UserDao {
@@ -12,4 +14,5 @@ public interface UserDao {
 	List<User> getUser();
 	
 	User getUser(String name);
+	
 }
