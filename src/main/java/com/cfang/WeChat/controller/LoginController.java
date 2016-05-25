@@ -1,6 +1,8 @@
 package com.cfang.WeChat.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -79,8 +81,15 @@ public class LoginController {
 //        JsonUtils.renderJson(response, lstTree);
     	//加载菜单项
         List<Role> list = this.userService.getUser((String)SecurityUtils.getSubject().getPrincipals().iterator().next()).getRoleList();
-    	Set<OperatorResource> resources = getUserResources(list);
-    	JsonUtils.renderJson(response, new ArrayList(resources));
+        List<OperatorResource> resources = getUserResources(list);
+        Collections.sort(resources, new Comparator<OperatorResource>() {
+			@Override
+			public int compare(OperatorResource o1, OperatorResource o2) {
+				return o1.getId() - o2.getId();
+			}
+        	
+		});
+    	JsonUtils.renderJson(response, new ArrayList(getMenus(resources)));
 		return null;
 	}
 	
@@ -108,8 +117,8 @@ public class LoginController {
 		return null;
 	}
 	
-	private Set<OperatorResource> getUserResources(List<Role> list){
-		Set<OperatorResource> resources = new HashSet<OperatorResource>();
+	private List<OperatorResource> getUserResources(List<Role> list){
+		List<OperatorResource> resources = new ArrayList<OperatorResource>();
 		Iterator<Role> iterator = list.iterator();
 		while(iterator.hasNext()){
 			Role role = iterator.next();
@@ -120,16 +129,36 @@ public class LoginController {
 		return resources;
 	}
 	
-	private Set<MenuDto> getMenus(Set<OperatorResource> resources){
-		Set<MenuDto> result = new HashSet<MenuDto>();
+	private List<MenuDto> getMenus(List<OperatorResource> resources){
+		List<MenuDto> result = new ArrayList<MenuDto>();
 		MenuDto menuDto = null;
 		Iterator<OperatorResource> iterator = resources.iterator();
 		OperatorResource operatorResource = null;
+		List<OperatorResource> childs = null;
 		while(iterator.hasNext()){
 			operatorResource = iterator.next();
-			menuDto = new MenuDto();
-			menuDto.setId(operatorResource.getId());
+			childs = operatorResource.loadSortedChildren();
+			if(null == childs || childs.isEmpty())
+				continue;
+			//添加父菜单
+			result.add(getDto(operatorResource, menuDto));
+			//添加二级菜单
+			Iterator<OperatorResource> iterator_1 = childs.iterator();
+			while(iterator_1.hasNext()){
+				operatorResource = iterator_1.next();
+				result.add(getDto(operatorResource, menuDto));
+			}
 		}
 		return result;
+	}
+	
+	private MenuDto getDto(OperatorResource operatorResource, MenuDto menuDto){
+		menuDto = new MenuDto();
+		menuDto.setId(operatorResource.getId());
+		menuDto.setName(operatorResource.getResourceName());
+		menuDto.setParentId(operatorResource.getParent().getId());
+		menuDto.setResourceURL(operatorResource.getResourceURL());
+		menuDto.setClick(operatorResource.getParent().getId()==0 ? Boolean.FALSE:Boolean.TRUE);
+		return menuDto;
 	}
 }

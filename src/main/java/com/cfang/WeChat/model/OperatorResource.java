@@ -114,7 +114,7 @@ public class OperatorResource extends BaseEntity {
 	}
 	
 	/***
-	 * 加载已排序的子菜单列表. loadSortedChildren:
+	 * 加载已排序的子菜单列表 + 父级菜单. loadSortedChildren:
 	 * @return
 	 */
 	@Transient
@@ -122,7 +122,7 @@ public class OperatorResource extends BaseEntity {
 		if (childs != null && !childs.isEmpty()) {
 			Collections.sort(childs, new Comparator<OperatorResource>() {
 				public int compare(OperatorResource o1, OperatorResource o2) {
-					return o1.getId() - o2.getId();//升序
+					return o1.getIndex() - o2.getIndex();//升序
 				}
 			});
 		}

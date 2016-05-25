@@ -9,7 +9,7 @@ var setting = {
 		simpleData : {
 			enable : true,
 			idKey : "id",
-			pIdKey : "parent_id",
+			pIdKey : "parentId",
 			rootPId : 0
 		}
 	},
@@ -31,7 +31,6 @@ $(function() {
 			alert('请求失败');
 		},
 		success : function(data) { // 请求成功后处理函数。
-			alert(data);
 			$.fn.zTree.init($("#tree"), setting, data); // 把后台封装好的简单Json格式赋给
 			treeObj = $.fn.zTree.getZTreeObj("tree");//获取id为tree的zTree的对象
 		}
