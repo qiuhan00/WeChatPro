@@ -269,7 +269,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 
 	@Override
 	public long countHqlResult(String hql, Map<String, Object> values) {
-		hql = hql.toLowerCase();
+		//hql = hql.toLowerCase();
 		hql = "select count(*) from" + StringUtils.substringAfter(hql, "from");
 		hql = StringUtils.substringBefore(hql, "order by");
 		return (Long)this.queryByParamUnique(hql, values);

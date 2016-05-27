@@ -3,6 +3,7 @@ package com.cfang.WeChat.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,9 +12,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.jws.soap.SOAPBinding.Use;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -21,6 +24,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.cfang.WeChat.dto.MenuDto;
 import com.cfang.WeChat.dto.UserDto;
@@ -35,6 +40,8 @@ import com.cfang.WeChat.utils.Page;
 @Controller
 @RequestMapping(value="/login")
 public class LoginController {
+	
+	private static final Logger log = Logger.getLogger(LoginController.class);
 
 	@RequestMapping(value = "/index")
 	public ModelAndView index(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -48,6 +55,7 @@ public class LoginController {
 			SecurityUtils.getSubject().login(new UsernamePasswordToken(request.getParameter("username"), 
 					request.getParameter("password")));
 			request.getSession().setAttribute("userName", request.getParameter("username"));
+			view.addObject("userName", request.getParameter("username"));
 		} catch (AuthenticationException e) {
 			view = new ModelAndView(Constant.LoginManage.VIEW_LOGIN_PAGE);
 			view.addObject("errorMsg", "用户名或者密码错误"); 
@@ -80,7 +88,8 @@ public class LoginController {
 //        lstTree.add(s4);  
 //        JsonUtils.renderJson(response, lstTree);
     	//加载菜单项
-        List<Role> list = this.userService.getUser((String)SecurityUtils.getSubject().getPrincipals().iterator().next()).getRoleList();
+		User user = this.userService.getUser((String)SecurityUtils.getSubject().getPrincipals().iterator().next());
+        List<Role> list = user.getRoleList();
         List<OperatorResource> resources = getUserResources(list);
         Collections.sort(resources, new Comparator<OperatorResource>() {
 			@Override
@@ -104,16 +113,32 @@ public class LoginController {
 	
 	@RequestMapping(value="/find")
 	public ModelAndView find(HttpServletRequest request, HttpServletResponse response, UserDto userDto) throws Exception{
-		SimplePropertyPreFilter filter = new SimplePropertyPreFilter(User.class, "userName","openId","createTime");
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("userName", "总计");
-		params.put("openId", "test footer");
+		SimplePropertyPreFilter filter = new SimplePropertyPreFilter(User.class, "id","status", "userName","openId","createTime");
+		Map<String, Object> footer = new HashMap<String, Object>();
+//		footer.put("userName", "总计");
+//		footer.put("openId", "test footer");
 		Page page = new Page(50);
-		page.setPageNo(1);
-		page.setPageSize(20);
-		page.setTotalCount(2);
-		page.setResult(this.userService.getUser());
-		JsonUtils.renderJson(response, page, params, "", filter);
+		if(userDto.getPage() > 0){
+	      page.setPageNo(userDto.getPage());
+	    }
+	    if(userDto.getRows() > 0){
+	      page.setPageSize(userDto.getRows());
+        }
+		this.userService.getUser(page, userDto);
+		JsonUtils.renderJson(response, page, footer, "", filter);
+		return null;
+	}
+	
+	@RequestMapping(value="/saveUser")
+	public ModelAndView save(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		try {
+			System.err.println(request.getParameter("_easy_grid"));
+			List<User> insertUsers = JsonUtils.getInsertRecords(User.class, request);
+			JsonUtils.renderSuccess("保存成功", response);
+		} catch (Exception e) {
+			log.error("保存失败", e);
+			JsonUtils.renderFailure("保存失败,message:" + e.getMessage(), response);
+		}
 		return null;
 	}
 	

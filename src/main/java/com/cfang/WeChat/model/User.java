@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.collections.functors.FalsePredicate;
+
 @Entity
 @Table(name="t_user")
 public class User extends BaseEntity{
@@ -24,6 +26,7 @@ public class User extends BaseEntity{
 	private String userName;
 	private String passWord;
 	private String openId;
+	private String status;
 	private List<Role> roleList;//一个用户具有多个角色
 	@Column(name="username", nullable=false)
 	public String getUserName() {
@@ -45,6 +48,13 @@ public class User extends BaseEntity{
 	}
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+	@Column(name="status", nullable=false)
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	@ManyToMany(fetch=FetchType.EAGER)

@@ -26,13 +26,14 @@
 		</form>
 	</div>
 	<div>
-		<table class="easyui-datagrid" id="tt" fitColumns=true url="${path }/login/find">
+		<table id="tt">
 		</table>
 	</div>
 	<script src="${HOME }/js/user/common.js"></script>
 	<script type="text/javascript">
 		var path = "${path}";
 		var isFirst = true;
+		var editIndex = undefined; //当前编辑的行
 		$(function() {
 			init();
 			$("#search").click(function() {
@@ -45,15 +46,33 @@
 		}
 		
 		function init(){
-			$('#tt').datagrid({
+		  $('#tt').datagrid({
+				url : path+'/login/find',//"${path }/login/find"
+				title : "用户信息列表",
 				pagination : true,
 				pageSize : 20,
 				pageList : [ 50, 40, 30, 20, 10 ],
-				showFooter : true,
+				//showFooter : false,
+				singleSelect:true,
+				rownumbers:true,
+				fitColumns:true,
+				idField:'id',//主键
 				columns : [ [ {
 					field : 'userName',
 					title : '用户名',
-					width : 150,
+					width : 50,
+					editor : {
+						type : 'validatebox',
+						options : {
+							required : 'true',
+							validType : 'length[1,100]'
+						}
+					}
+				},{
+					field : 'openId',
+					title : 'openId',
+					align : 'center',
+					width : 50,
 					editor : {
 						type : 'validatebox',
 						options : {
@@ -65,15 +84,96 @@
 					field : 'createTime',
 					title : '创建时间',
 					align : 'center',
-					width : 100
-				},{
-					field : 'openId',
-					title : 'openId',
+					width : 60
+				}, {
+					field : 'id',
+					title : '操作',
+					width : 160,
 					align : 'center',
-					width : 80
-				}]]
+					formatter : function(value, row, index) {
+					 	var id = row.id;
+						var status = row.status;
+						var html = "";
+						if (id != undefined && status == 'E') {
+							html += "<a href='javascript:void(0)' onclick='del(" + id + ");'>禁用</a>&nbsp;";
+						}else if (id != undefined && status == 'U'){
+							html += "<a href='javascript:void(0)' onclick='del(" + id + ");'>启用</a>&nbsp;";
+						}
+						return html;
+					}
+				}]],toolbar:[{
+					text : '新增',
+					iconCls : 'icon-add',
+					handler : function() {
+						if(editIndex != undefined){ //添加时先判断是否有开启编辑的行，如果有则把开启编辑的那行结束编辑
+							$('#tt').datagrid('endEdit', editIndex);
+						}
+						if(editIndex == undefined){
+							var field = {
+								type : 'T'
+							};
+							$('#tt').datagrid('appendRow', field);
+							editIndex = $('#tt').datagrid('getRows').length - 1;
+							$('#tt').datagrid('selectRow', editIndex);
+							$('#tt').datagrid('beginEdit', editIndex);
+							focusEditor('tt', field, editIndex);
+						}
+					}
+				}, '-', '-', {
+					text : '保存',
+					iconCls : 'icon-save',
+					handler : function() {
+						accept();
+					}
+				}, '-' ]
 			});
 		};
+		
+		function del(id) {
+			if (id == 0) { //點擊工具按鈕刪除
+				var row = $('#tt').datagrid('getSelected');
+				if (row) {
+					var index = $('#tt').datagrid('getRowIndex', row);
+					var nextSelect = index;
+					if (row.id == undefined) {
+						$('#tt').datagrid('deleteRow', index);
+						nextSelect = index > 0 ? index - 1 : 0;
+						var cnt = $('#tt').datagrid('getRows').length;
+						if (cnt > 0) {
+							$('#tt').datagrid('selectRow', nextSelect);
+						}
+					}
+
+				}
+				id = row.id;
+			}
+			$.messager.confirm('提示', '确认修改?', function(t) {
+				if (t) {
+					$.post("delUser?id=" + id, function(result) {
+						var rObj = eval(result);
+						if (rObj.success) {
+							$('#tt').datagrid('reload');
+						} else {
+							$.messager.alert('error', rObj.failure, 'warning');
+						}
+					});
+				}
+			});
+		}
+		
+		function accept() {
+			if (!endEditing())
+				return;
+			$.post(path+"/login/saveUser", ToSaveParam("tt"), function(result) {
+				var rObj = eval(result);
+				if (rObj.success) {
+					$('#tt').datagrid('reload');
+					$('#tt').datagrid('acceptChanges');
+				} else {
+					$.messager.alert('error', rObj.failure, 'warning');
+				}
+			});
+		}
 		
 	</script>
 </body>

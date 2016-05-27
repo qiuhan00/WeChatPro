@@ -21,6 +21,70 @@ function myparser(s) {
 		return new Date();
 	}
 }
+/** 格式化金额 s-待格式化字段 n-保留小数位 */
+function fmoney(s, n) {
+	n = n >= 0 && n <= 20 ? n : 2;
+	s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+	var l = s.split(".")[0].split("").reverse();
+	var r = n > 0 ? s.split(".")[1] : '';
+	t = "";
+	for (var i = 0; i < l.length; i++) {
+		t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+	}
+	var value = t.split("").reverse().join("");
+	if (n > 0) {
+		value += "." + r;
+	}
+	return value;
+}
+function focusEditor(tableId,field,editIndex){
+	var editor = $('#'+tableId).datagrid('getEditor', {index:editIndex,field:field});
+	if (editor){
+		editor.target.focus();
+	} else {
+		var editors = $('#'+tableId).datagrid('getEditors', editIndex);
+		if (editors.length){
+			editors[0].target.focus();
+		}
+	}
+}
+
+/*获取可编辑表格所有更改的数据,返回json对象*/
+function ToSaveJson(gridId){
+	var inserted = $('#'+gridId).datagrid('getChanges','inserted');
+	var updated = $('#'+gridId).datagrid('getChanges','updated');
+	var deleted = $('#'+gridId).datagrid('getChanges','deleted');
+	var result ={'_inserted':inserted,'_updated':updated,'_deleted':deleted};
+	return result;
+}
+
+/*获取可编辑表格所有更改的数据,返回格式为后台接收需要的格式*/
+function ToSaveParam(gridId,parentId){
+	var result = ToSaveJson(gridId);
+	result = JSON.stringify(result);
+	var param = {'_easy_grid':result};
+	if(parentId){
+		param = {'_easy_grid':result,'parentId':parentId};
+	}
+	return param;
+}
+
+function endEditing() {
+	if (editIndex == undefined) {
+		return true;
+	}
+	if ($('#tt').datagrid('validateRow', editIndex)) {
+		$('#tt').datagrid('endEdit', editIndex);
+		editIndex = undefined;
+		var rows = $("#tt").datagrid("getRows");
+		for ( var i = 0; i < rows.length; i++) {
+			$('#tt').datagrid('endEdit', i);
+		}
+		return true;
+	} else {
+		return false;
+	}
+}
 /**
  * 序列化form表单的元素
  */

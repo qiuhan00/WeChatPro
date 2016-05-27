@@ -9,9 +9,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cfang.WeChat.common.MemCache;
+import com.cfang.WeChat.dao.IBaseDao;
 import com.cfang.WeChat.dao.UserDao;
+import com.cfang.WeChat.dto.UserDto;
 import com.cfang.WeChat.model.User;
 import com.cfang.WeChat.service.UserService;
+import com.cfang.WeChat.utils.Page;
 
 @Service(value="userServiceImpl")
 public class UserServiceImpl implements UserService {
@@ -27,13 +30,18 @@ public class UserServiceImpl implements UserService {
 
 	@MemCache(prefix="findUsers", expiration= 1000*60*60)
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<User> getUser() {
-		return userDao.getUser();
+	public Page getUser(Page page, UserDto dto) {
+		return userDao.getUser(page, dto);
 	}
 
 	@Override
 	public User getUser(String name) {
 		return userDao.getUser(name);
+	}
+
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void saveUser(User user) {
+		this.userDao.saveUser(user);
 	}
 	
 	

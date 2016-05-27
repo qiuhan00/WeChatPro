@@ -14,11 +14,13 @@ var setting = {
 		}
 	},
 	callback:{
+		//beforeClick: this.beforeClick,
 		onClick:openNew  //绑定菜单单击事件
 	}
 };
 var zNodes;
 var treeObj;
+var curMenu = null
 $(function() {
 	//后台获取菜单项json数据
 	$.ajax({
@@ -31,8 +33,17 @@ $(function() {
 			alert('请求失败');
 		},
 		success : function(data) { // 请求成功后处理函数。
+			if(null == data || data==""){
+				$("#tree").html("<h2>无权限资源</h2>");
+				return;
+			}
 			$.fn.zTree.init($("#tree"), setting, data); // 把后台封装好的简单Json格式赋给
 			treeObj = $.fn.zTree.getZTreeObj("tree");//获取id为tree的zTree的对象
+			
+			/*curMenu = treeObj.getNodes()[0].children[0];
+			treeObj.selectNode(curMenu);
+			var a = $("#" + treeObj.getNodes()[0].tId + "_a");
+			a.addClass("cur");*/
 		}
 	});
 	
@@ -73,7 +84,7 @@ function openNew(event,treeId,treeNode){
 		$("#tabs").tabs("add",{
 			title : tabName,
 			closable:true,
-			content:'<div style="width:100%;height:100%;overflow:hidden;">'  
+			content:'<div style="width:100%;height:100%;overflow:hidden;background:#f0f6e4;">'  
                 +'<iframe src="'  
                 + url 
                 +'" scrolling="auto" style="width:100%;height:100%;border:0;"></iframe></div>'
@@ -84,6 +95,9 @@ function openNew(event,treeId,treeNode){
 function closeTabs(menu, type){
 	var currTab = $(menu).data("tabTitle");
 	var tabs = $("#tabs");
+	if(currTab == "登录信息"){
+		return;
+	}
 	if(type == 'close'){
 		tabs.tabs("close",currTab);
 	}
@@ -102,4 +116,40 @@ function closeTabs(menu, type){
     for (var i = 0; i < closeTabsTitle.length; i++) {
         tabs.tabs("close", closeTabsTitle[i]);
     }
+}
+
+function beforeClick(treeId, node) {
+	if (node.isParent) {
+		if (node.level === 0) {
+			var pNode = curMenu;
+			while (pNode && pNode.level !==0) {
+				pNode = pNode.getParentNode();
+			}
+			if (pNode !== node) {
+				var a = $("#" + pNode.tId + "_a");
+				a.removeClass("cur");
+				zTree_Menu.expandNode(pNode, false);
+			}
+			a = $("#" + node.tId + "_a");
+			a.addClass("cur");
+
+			var isOpen = false;
+			for (var i=0,l=node.children.length; i<l; i++) {
+				if(node.children[i].open) {
+					isOpen = true;
+					break;
+				}
+			}
+			if (isOpen) {
+				zTree_Menu.expandNode(node, true);
+				curMenu = node;
+			} else {
+				zTree_Menu.expandNode(node.children[0].isParent?node.children[0]:node, true);
+				curMenu = node.children[0];
+			}
+		} else {
+			zTree_Menu.expandNode(node);
+		}
+	}
+	return !node.isParent;
 }
