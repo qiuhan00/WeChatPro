@@ -60,6 +60,7 @@
 				columns : [ [ {
 					field : 'userName',
 					title : '用户名',
+					align : 'center',
 					width : 50,
 					editor : {
 						type : 'validatebox',

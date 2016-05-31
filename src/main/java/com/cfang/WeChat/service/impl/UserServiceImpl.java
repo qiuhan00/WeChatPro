@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cfang.WeChat.common.MasterDataSource;
 import com.cfang.WeChat.common.MemCache;
 import com.cfang.WeChat.dao.IBaseDao;
 import com.cfang.WeChat.dao.UserDao;
@@ -23,7 +24,6 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 	
 	@MemCache(prefix="findUserById", expiration= 1000*60*60*2)
-	@Transactional(propagation=Propagation.REQUIRED)
 	public User getUser(int id) {
 		return userDao.getUser(id);
 	}
@@ -39,11 +39,10 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUser(name);
 	}
 
-	@Transactional(propagation = Propagation.REQUIRED)
+	@MasterDataSource(name="")
+	@Transactional(propagation=Propagation.REQUIRED)
 	public void saveUser(User user) {
 		this.userDao.saveUser(user);
 	}
 	
-	
-
 }

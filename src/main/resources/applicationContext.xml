@@ -24,12 +24,28 @@
     <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
     
     <!-- 配置jdbc数据源 -->
-    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <bean id="masterDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc.url}" />
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
     </bean>
+     <bean id="slaveDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+    </bean>
+    <bean id="datasource" class="com.cfang.WeChat.utils.DynamicDataSource">
+    	<property name="targetDataSources">
+    		<map key-type="java.lang.String">  
+	            <entry key="slave" value-ref="slaveDataSource"/> 
+	        </map>  
+    	</property>
+    	<!-- 默认目标数据源为主库数据源 -->
+    	<property name="defaultTargetDataSource" ref="masterDataSource"></property>
+    </bean>
+    
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <property name="dataSource" ref="datasource"/> 
       	 <property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration"/>
@@ -87,4 +103,28 @@
 	<!-- 启动对@AspectJ注解的支持, AOP的注解支持 -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
     
+    <!-- 配置数据库注解aop -->
+    <!-- 动态切换数据源 -->
+    <bean id="dataSourceAdvice" class="com.cfang.WeChat.utils.DataSourceAdvice" />
+	<!--配置事务的传播特性 -->  
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+            <tx:method name="add*" propagation="REQUIRED" />  
+            <tx:method name="create*" propagation="REQUIRED" />  
+            <tx:method name="save*" propagation="REQUIRED" />  
+            <tx:method name="edit*" propagation="REQUIRED" />  
+            <tx:method name="update*" propagation="REQUIRED" />  
+            <tx:method name="delete*" propagation="REQUIRED" />  
+            <tx:method name="remove*" propagation="REQUIRED" /> 
+            <!-- <tx:method name="*" propagation="SUPPORTS" read-only="true"/> -->
+        </tx:attributes>  
+    </tx:advice>  
+    <aop:config>  
+        <aop:advisor pointcut="execution(* com.cfang.*.service.*.*(..))"  advice-ref="txAdvice" />  
+    </aop:config>
+    <aop:config>  
+    	<aop:pointcut id="txPointcut" expression="execution(* com.cfang.*.service.*.*(..)))"/>
+    	<aop:advisor pointcut-ref="txPointcut" advice-ref="dataSourceAdvice" order="1"/>
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" order="2"/>  
+    </aop:config>
 </beans>

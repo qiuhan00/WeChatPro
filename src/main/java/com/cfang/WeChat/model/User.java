@@ -14,10 +14,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.apache.commons.collections.functors.FalsePredicate;
+import org.hibernate.annotations.OptimisticLockType;
 
 @Entity
+@org.hibernate.annotations.Entity(dynamicInsert = true, dynamicUpdate = true, optimisticLock=OptimisticLockType.VERSION)
 @Table(name="t_user")
 public class User extends BaseEntity{
 
@@ -28,6 +31,15 @@ public class User extends BaseEntity{
 	private String openId;
 	private String status;
 	private List<Role> roleList;//一个用户具有多个角色
+	private int version;//hibernate乐观锁
+	@Version
+	@Column(name="version", length = 11)
+	public int getVersion() {
+		return version;
+	}
+	public void setVersion(int version) {
+		this.version = version;
+	}
 	@Column(name="username", nullable=false)
 	public String getUserName() {
 		return userName;

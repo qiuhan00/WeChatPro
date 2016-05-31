@@ -1,5 +1,6 @@
 package com.cfang.test;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cfang.WeChat.dao.IBaseDao;
 import com.cfang.WeChat.model.User;
 import com.cfang.WeChat.service.UserService;
+import com.cfang.WeChat.utils.DataSourceSwitcher;
 import com.cfang.WeChat.utils.Page;
 
 
@@ -37,7 +39,7 @@ public class UserTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void get(){
-		User user = this.userService.getUser(2);
+		User user = this.userService.getUser(19);
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 //		map.put("id", 2);
 		map.put("passWord", "123");
@@ -53,8 +55,13 @@ public class UserTest {
 //        user = (User) page.getResult().get(0);
 //        Object[] object = (Object[]) page.getResult().get(0);
 //        logger.info("totalCount:"+page.getTotalCount()+",number:"+page.getResult().size()+",提取的姓名："+object[1]);
-        logger.info(this.baseDaoImpl.batchExcute("update User set passWord=? where openId=?", map));
+//        logger.info(this.baseDaoImpl.batchExcute("update User set passWord=? where openId=?", map));
 //        logger.info(this.baseDaoImpl.batchExcuteSql("update t_user set passWord=:passWord where openId=:openId", map));
-        
+//        User user1 = new User();
+//        user1.setUserName("data");
+//        user1.setOpenId("123123123");
+//        user1.setStatus("U");
+//        user1.setPassWord("123123");
+//        this.userService.saveUser(user1);
 	}
 }
