@@ -18,6 +18,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +26,9 @@ import com.cfang.WeChat.common.MasterDataSource;
 import com.cfang.WeChat.utils.DataSourceSwitcher;
 import com.cfang.WeChat.utils.Md5Utils;
 
-@Deprecated
-//@Service
-//@Aspect
-public class DataSourceAopImpl {
+@Service
+@Aspect
+public class DataSourceAopImpl implements Ordered{
 	
 	String[] methodStartWiths = new String[]{"add","create","save","edit","update","delete","remove"};
 	/**
@@ -138,5 +138,10 @@ public class DataSourceAopImpl {
         }
         sb.append(prefixValue);
         return Md5Utils.getMd5(sb.toString());  
-    }  
+    }
+
+	@Override
+	public int getOrder() {
+		return 1;
+	}  
 }

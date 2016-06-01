@@ -25,8 +25,8 @@ import com.cfang.WeChat.utils.Page;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml","classpath:applicationContext-memcache.xml"})
-@Transactional
-@TransactionConfiguration(transactionManager="transactionManager",defaultRollback=false)
+//@Transactional
+//@TransactionConfiguration(transactionManager="transactionManager",defaultRollback=false)
 public class UserTest {
 	
 	private static Logger logger = Logger.getLogger(UserTest.class);  

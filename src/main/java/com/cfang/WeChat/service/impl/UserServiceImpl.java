@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 		return userDao.getUser(name);
 	}
 
-	@MasterDataSource(name="")
+	@MasterDataSource(name="saveUser")
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void saveUser(User user) {
 		this.userDao.saveUser(user);

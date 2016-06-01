@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.MethodBeforeAdvice;
 
+@Deprecated
 public class DataSourceAdvice implements MethodBeforeAdvice{
 
 	private static Logger LOG = LoggerFactory.getLogger(DataSourceAdvice.class);

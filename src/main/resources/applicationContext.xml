@@ -94,8 +94,9 @@
         <property name="sessionFactory" ref="sessionFactory"/>  
     </bean>
     
-    <!-- 开启注解事务 , proxy-target-class:true-基于类， false-基于接口-->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false"/>
+    <!-- 开启注解事务 , proxy-target-class:true-基于类， false-基于接口; order=2，读写分离中，
+    		事务必须在切换aop(DataSourceAopImpl)数据源之后启动-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="false" order="2"/>
     
     <!-- 事务异常封装 -->
     <bean id="exceptionResolver" class="com.cfang.WeChat.exception.MyExceptionHandler"/>
@@ -107,7 +108,7 @@
     <!-- 动态切换数据源 -->
     <bean id="dataSourceAdvice" class="com.cfang.WeChat.utils.DataSourceAdvice" />
 	<!--配置事务的传播特性 -->  
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">  
+    <!--  <tx:advice id="txAdvice" transaction-manager="transactionManager">  
         <tx:attributes>  
             <tx:method name="add*" propagation="REQUIRED" />  
             <tx:method name="create*" propagation="REQUIRED" />  
@@ -116,15 +117,12 @@
             <tx:method name="update*" propagation="REQUIRED" />  
             <tx:method name="delete*" propagation="REQUIRED" />  
             <tx:method name="remove*" propagation="REQUIRED" /> 
-            <!-- <tx:method name="*" propagation="SUPPORTS" read-only="true"/> -->
+            <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
         </tx:attributes>  
     </tx:advice>  
-    <aop:config>  
-        <aop:advisor pointcut="execution(* com.cfang.*.service.*.*(..))"  advice-ref="txAdvice" />  
-    </aop:config>
     <aop:config>  
     	<aop:pointcut id="txPointcut" expression="execution(* com.cfang.*.service.*.*(..)))"/>
     	<aop:advisor pointcut-ref="txPointcut" advice-ref="dataSourceAdvice" order="1"/>
         <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" order="2"/>  
-    </aop:config>
+    </aop:config> -->
 </beans>

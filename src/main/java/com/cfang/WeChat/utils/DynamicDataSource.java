@@ -6,7 +6,6 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
 	@Override
 	protected Object determineCurrentLookupKey() {
-		System.out.println("11111111111:" + DataSourceSwitcher.getDataSource());
 		return DataSourceSwitcher.getDataSource();
 	}
 
