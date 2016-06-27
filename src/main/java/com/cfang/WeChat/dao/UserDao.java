@@ -18,4 +18,6 @@ public interface UserDao {
 	User getUser(String name);
 	
 	void saveUser(User user);
+	
+	List<User> getUsers();
 }

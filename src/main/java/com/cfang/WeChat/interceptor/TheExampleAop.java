@@ -1,34 +1,38 @@
 package com.cfang.WeChat.interceptor;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.naming.spi.DirStateFactory.Result;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.cfang.WeChat.common.MemCache;
 import com.cfang.WeChat.common.MemCacheUpdate;
 import com.cfang.WeChat.memcache.MemCacheService;
 import com.cfang.WeChat.model.User;
 import com.cfang.WeChat.utils.Md5Utils;
 
-@Service
-@Aspect
-public class MemCacheAopImpl implements Ordered{
-	
+//@Service
+//@Aspect
+public class TheExampleAop  implements Ordered{
+
 	@Resource(name="memCacheServiceImpl")
 	private MemCacheService memCacheService;
 
@@ -39,7 +43,48 @@ public class MemCacheAopImpl implements Ordered{
 	public void aspect() {
 
 	}
+
+	/**
+	 * 配置前置通知,使用在方法aspect()上注册的切入点,同时接受JoinPoint切入点对象,可以没有该参数
+	 * 
+	 * @param joinPoint
+	 */
+	@Before("aspect()")
+	public void before(JoinPoint joinPoint) {
+		System.out.println("---------------aop before----------");
+		System.out.println(joinPoint);
+	}
 	
+	/**
+	 * 配置后置通知,使用在方法aspect()上注册的切入点
+	 * @param joinPoint
+	 */
+	@After("aspect()")
+	public void after(JoinPoint joinPoint) {
+		System.out.println("---------------aop after----------");
+		System.out.println(joinPoint);
+	}
+	
+	/**
+	 * 配置后置返回通知,使用在方法aspect()上注册的切入点
+	 * @param joinPoint
+	 */
+	@AfterReturning("aspect()")
+	public void afterReturn(JoinPoint joinPoint) {
+		System.out.println("afterReturn " + joinPoint);
+	}
+	
+	/**
+	 * 配置抛出异常后通知,使用在方法aspect()上注册的切入点
+	 * @param joinPoint
+	 * @param ex
+	 */
+	@AfterThrowing(pointcut = "aspect()", throwing = "ex")
+	public void afterThrow(JoinPoint joinPoint, Exception ex) {
+		System.out.println("---------------------异常aop--------------");
+		System.out.println("afterThrow " + joinPoint + "\r" + ex.getMessage());
+	}
+
 	// 配置环绕通知,使用在方法aspect()上注册的切入点
 	@Around("aspect()")
 	public Object around(JoinPoint joinPoint) throws Throwable {
@@ -55,6 +100,7 @@ public class MemCacheAopImpl implements Ordered{
 			if(m.equals(method)){
 				if(m.isAnnotationPresent(MemCache.class)){
 					MemCache memCache = m.getAnnotation(MemCache.class);
+					Object tempType = m.getGenericReturnType();
 					if(null != memCache){ //如果memcache中存在
 						String prefix = memCache.prefix();//获取注解前缀，使用是各个业务包名
 						if(null != memCacheService.get(prefix)){//获取版本号
@@ -73,16 +119,10 @@ public class MemCacheAopImpl implements Ordered{
                             memCacheService.set(key, JSON.toJSONString(object), expireTime);
 						}else{
 							String memresult = object.toString();//如果memcached中存在结果，需要将result反序列化后返回结果
-							if(!memresult.startsWith("[")){
-								memresult = "["+memresult+"]";
-							}
-							Type tempType = m.getGenericReturnType();
-							List obj = JSON.parseArray(memresult, memCache.cls());
-							if(!m.getReturnType().isInterface()){ //返回的为实例对象
-								if(!obj.isEmpty() && obj.size() > 0){
-									object = obj.get(0);
-								}
-							}else{  //返回集合对象
+							List obj = JSON.parseArray("["+memresult+"]", memCache.cls());
+							if(obj.size() == 1 && !obj.isEmpty()){
+								object = obj.get(0);
+							}else{
 								object = obj;
 							}
 						}
@@ -133,6 +173,6 @@ public class MemCacheAopImpl implements Ordered{
 
 	@Override
 	public int getOrder() {
-		return 2;
+		return 1;
 	}  
 }

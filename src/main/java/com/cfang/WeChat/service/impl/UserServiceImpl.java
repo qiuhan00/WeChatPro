@@ -23,18 +23,19 @@ public class UserServiceImpl implements UserService {
 	@Resource(name="userDaoImpl")
 	private UserDao userDao;
 	
-	@MemCache(prefix="findUserById", expiration= 1000*60*60*2)
+	@MemCache(prefix="findUserById", expiration= 1000*60*60*2, cls = User.class)
+	@Transactional(propagation=Propagation.REQUIRED)
 	public User getUser(int id) {
 		return userDao.getUser(id);
 	}
 
-	@MemCache(prefix="findUsers", expiration= 1000*60*60)
+	@MemCache(prefix="findUsers", expiration= 1000*60*60, cls = User.class)
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Page getUser(Page page, UserDto dto) {
 		return userDao.getUser(page, dto);
 	}
 
-	@Override
+	@Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
 	public User getUser(String name) {
 		return userDao.getUser(name);
 	}
@@ -45,4 +46,9 @@ public class UserServiceImpl implements UserService {
 		this.userDao.saveUser(user);
 	}
 	
+	@MemCache(prefix="findUsers", expiration= 1000*60*60*2, cls = User.class)
+	@Transactional(propagation=Propagation.REQUIRED)
+	public List<User> getUsers() {
+		return userDao.getUsers();
+	}
 }

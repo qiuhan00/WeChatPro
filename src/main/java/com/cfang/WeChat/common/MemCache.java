@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 public @interface MemCache {
 	String prefix();
 	long expiration() default 1000*60*60*2;//缓存有效期 1000*60*60*2==2小时过期  
+	Class cls();
 }

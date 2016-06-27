@@ -29,7 +29,7 @@ public class ActivemqTest {
 	@Test
 	public void testSend(){
 		for (int i=0; i<2; i++) {  
-            producerService.sendMessage(destination, "你好，生产者！这是消息：" + (i+1));  
+            producerService.sendMessage(destination, "你好！这是消息：" + (i+1));  
         }  
 	}
 }

@@ -19,9 +19,10 @@ import com.cfang.WeChat.service.UserService;
 import com.whalin.MemCached.MemCachedClient;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:applicationContext.xml","classpath:applicationContext-memcache.xml"})
-@Transactional
-@TransactionConfiguration(transactionManager="transactionManager",defaultRollback=true)
+@ContextConfiguration(locations={"classpath:applicationContext.xml","classpath:applicationContext-memcache.xml"
+		,"classpath:applicationContext-jms.xml"})
+//@Transactional
+//@TransactionConfiguration(transactionManager="transactionManager",defaultRollback=true)
 public class MemCacheTest {
 	
 	private static Logger logger = Logger.getLogger(MemCacheTest.class);  
@@ -35,14 +36,15 @@ public class MemCacheTest {
 	
 	@Test
 	public void testMem(){
-		memcachedClient.set("999", "cfang");
+//		memcachedClient.set("999", "cfang");
 //		memcachedClient.delete("findUserById_BDA6203EA0E67EB01603A7E5993ECD95");
 //		logger.info("提取的姓名："+memcachedClient.get("999"));
-//		User user = this.userService.getUser(2);
-//		logger.info("提取的姓名："+user.getUserName());
+//		memCacheService.flushAll();
+		User user = this.userService.getUser(19);
+		logger.info("提取的姓名："+user.getUserName());
 		
-//		List<User> user = this.userService.getUser();
-//		logger.info("提取, size:"+user.size()+"|name:" + user.get(0).getUserName());
+		List<User> users = this.userService.getUsers();
+		logger.info("提取, size:"+users.size()+"|name:" + users.get(0).getUserName());
 //		
 //		logger.info("memcache提取的姓名："+ this.memCacheService.get("findUsers_BDA6203EA0E67EB01603A7E5993ECD95"));
 	}

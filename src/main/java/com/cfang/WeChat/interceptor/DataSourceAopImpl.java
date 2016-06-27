@@ -46,7 +46,7 @@ public class DataSourceAopImpl implements Ordered{
 	 */
 	@Before("aspect()")
 	public void before(JoinPoint joinPoint) {
-		System.out.println("---------------aop before----------");
+		System.out.println("---------------aop DataSourceSwitcher ----------");
 		ProceedingJoinPoint point = (ProceedingJoinPoint) joinPoint;
 		Method[] methods = point.getTarget().getClass().getDeclaredMethods();
 		MethodSignature signature = (MethodSignature) point.getSignature();
@@ -59,41 +59,21 @@ public class DataSourceAopImpl implements Ordered{
 					name = masterDataSource.name();
 					if(null != name && m.isAnnotationPresent(MasterDataSource.class) 
 							&& StringUtils.startsWithAny(name.toLowerCase(), methodStartWiths)){
-						System.out.println("class:"+point.getTarget().getClass().getSimpleName()
-								+",method:"+m.getName()+"-----------  使用master   ----------");
+						System.out.println("使用master,"+"class:"+point.getTarget().getClass().getSimpleName()
+								+",method:"+m.getName());
 						DataSourceSwitcher.setMaster();
 					}else{
-						System.out.println("class:"+point.getTarget().getClass().getSimpleName()
-								+",method:"+m.getName()+"-----------  使用slave1   ----------");
+						System.out.println("使用slave,"+"class:"+point.getTarget().getClass().getSimpleName()
+								+",method:"+m.getName());
 						DataSourceSwitcher.setSlave();
 					}
 				}else{
-					System.out.println("class:"+point.getTarget().getClass().getSimpleName()
-							+",method:"+method.getName()+"-----------  使用slave   ----------");
+					System.out.println("使用slave,"+"class:"+point.getTarget().getClass().getSimpleName()
+							+",method:"+method.getName());
 					DataSourceSwitcher.setSlave();
 				}
 			}
 		}
-		System.out.println(joinPoint);
-	}
-	
-	/**
-	 * 配置后置通知,使用在方法aspect()上注册的切入点
-	 * @param joinPoint
-	 */
-	@After("aspect()")
-	public void after(JoinPoint joinPoint) {
-		System.out.println("---------------aop after----------");
-		System.out.println(joinPoint);
-	}
-	
-	/**
-	 * 配置后置返回通知,使用在方法aspect()上注册的切入点
-	 * @param joinPoint
-	 */
-	@AfterReturning("aspect()")
-	public void afterReturn(JoinPoint joinPoint) {
-		System.out.println("afterReturn " + joinPoint);
 	}
 	
 	/**
@@ -106,42 +86,13 @@ public class DataSourceAopImpl implements Ordered{
 		System.out.println("---------------------异常aop--------------");
 		System.out.println("afterThrow " + joinPoint + "\r" + ex.getMessage());
 	}
-
-	// 配置环绕通知,使用在方法aspect()上注册的切入点
-	@Around("aspect()")
-	public Object around(JoinPoint joinPoint) throws Throwable {
-		long start = System.currentTimeMillis();
-		long end = System.currentTimeMillis();
-		System.out.println("around " + joinPoint + "\tUse time : "
-				+ (end - start) + " ms!");
-		Object object = ((ProceedingJoinPoint) joinPoint).proceed();
-		return object;
-	}
 	
-	private String getKey(Method method, Object [] args, String prefixValue){  
-        StringBuffer sb = new StringBuffer();   
-        //获取方法名
-        String methodName = method.getName();
-        //获取参数类型
-        Object[] classTemps = method.getParameterTypes();
-        //存入方法名
-        sb.append(methodName);
-        for (int i = 0; i < args.length; i++) {
-            sb.append(classTemps[i]+"&");
-            if (null == args[i]) {
-                sb.append("null");
-            } else if ("".equals(args[i])) {
-                sb.append("*");
-            } else {
-                sb.append(args[i]);
-            }
-        }
-        sb.append(prefixValue);
-        return Md5Utils.getMd5(sb.toString());  
-    }
-
+	/**
+	 * 确保数据源切换在事务开启之前执行,order越小越先执行,其中注解事务在配置文件中配置为order=2
+	 */
 	@Override
 	public int getOrder() {
 		return 1;
-	}  
+	} 
+	
 }

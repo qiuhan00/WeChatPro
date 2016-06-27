@@ -50,4 +50,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
 	public void saveUser(User user){
 		this.save(user);
 	}
+
+	@Override
+	public List<User> getUsers() {
+		return this.queryParams("from User", null, Boolean.FALSE);
+	}
 }
