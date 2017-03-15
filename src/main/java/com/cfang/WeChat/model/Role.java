@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -66,8 +67,10 @@ public class Role extends BaseEntity {
 	}
 
 	@ManyToMany
-	@JoinTable(name="t_user_role", joinColumns={@JoinColumn(name="role_id")}, 
-				inverseJoinColumns={@JoinColumn(name="user_id")})
+	@Cascade(value={CascadeType.SAVE_UPDATE})
+	@JoinTable(name="t_user_role",  //指定第三张表
+			  	joinColumns={@JoinColumn(name="role_id")},//本表与第三张表关联关系 
+				inverseJoinColumns={@JoinColumn(name="user_id")})  //另一张表与第三张表关联关系
 	public List<User> getUserList() {
 		return userList;
 	}

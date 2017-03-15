@@ -86,20 +86,20 @@ public class MemCacheAopImpl implements Ordered{
 								object = obj;
 							}
 						}
-					}else if(m.isAnnotationPresent(MemCacheUpdate.class)){
-						MemCacheUpdate memCacheUpdate = m.getAnnotation(MemCacheUpdate.class);
-						if(null != memCacheUpdate){
-							object = point.proceed();
-							String prefix = memCacheUpdate.prefix();
-							if(null != memCacheService.get(prefix)){
-								prefixValue = memCacheService.get(prefix).toString();
-							}
-							memCacheService.replace(prefix, Integer.parseInt(prefixValue.toString()) + 1);
-							System.out.println(memCacheService.get(prefix).toString());
-						}
-					}else{
-						object = point.proceed();
 					}
+				}else if(m.isAnnotationPresent(MemCacheUpdate.class)){
+					MemCacheUpdate memCacheUpdate = m.getAnnotation(MemCacheUpdate.class);
+					if(null != memCacheUpdate){
+						object = point.proceed();
+						String prefix = memCacheUpdate.prefix();
+						if(null != memCacheService.get(prefix)){
+							prefixValue = memCacheService.get(prefix).toString();
+						}
+						memCacheService.replace(prefix, Integer.parseInt(prefixValue.toString()) + 1);
+						System.out.println(memCacheService.get(prefix).toString());
+					}
+				}else{
+					object = point.proceed();
 				}
 			}
 		}
