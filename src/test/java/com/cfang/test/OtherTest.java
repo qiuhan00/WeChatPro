@@ -28,5 +28,6 @@ public class OtherTest {
 		dto.setName("test");
 		result.add(dto);
 		System.out.println(JSONArray.fromObject(result));
+		System.out.println(1);
 	}
 }
