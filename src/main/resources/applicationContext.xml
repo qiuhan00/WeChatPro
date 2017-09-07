@@ -11,6 +11,11 @@
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 启用springmvc注解 -->
+    <!-- 此标签向spring容器注册AutowiredAnnotationBeanPostProcessor(@Autowired)、RequiredAnnotationBeanPostProcessor(@Required)、
+    	CommonAnnotationBeanPostProcessor以及PersistenceAnnotationBeanPostProcessor这4个BeanPostProcessor。
+    	另外，在配置扫描包路径，即<context:component-scan/>时，该配置也包含了自动注入以上BeanPostProcessor功能，因此在配置了<context:component-scan/>时，
+    	也可以去除<context:annotation-config />配置，但是必须确保配置完全，以防万一，还是加上的妥当点。
+     -->
 	<context:annotation-config />
 	
 	<!-- 配置扫描包-->
