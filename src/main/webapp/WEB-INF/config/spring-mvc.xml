@@ -15,12 +15,20 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
 	
 	<!-- <context:component-scan/>标签是告诉Spring 来扫描指定包下的类，并注册被@Component，@Controller，@Service，@Repository等注解标记的组件。
 	         而<mvc:annotation-scan/>是告知Spring，我们启用注解驱动。然后Spring会自动为我们注册上面说到的几个Bean到工厂中，来处理我们的请求 -->
-	<!-- 自动注册多个bean，例如处理@RequestMapping、@Controller注解 -->
+	<!-- 自动注册多个bean，例如处理@RequestMapping、@Controller、@RequestBody、@ResponseBody等注解 -->
+	<!-- 同时，该配置默认加载很多的参数绑定方法，比如json转换解析器等 -->
 	<mvc:annotation-driven/>
 	
+	<!-- 上面这句配置，与一下两种方式等价 -->
+	<!-- spring3.1之后 -->
 	<!-- 
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>   
+    -->
+    <!-- spring3.1之前 -->
+	<!-- 
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>   
     -->
     
     <!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">  
