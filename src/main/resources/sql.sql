@@ -8,6 +8,8 @@ CREATE TABLE `t_user` (
   `openid` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+alter table `t_user` add column status varchar(10) default null;
+alter table `t_user` add column version int(11) not null;
 
 drop TABLE if EXISTS t_message;
 CREATE TABLE `t_message` (
